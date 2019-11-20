@@ -7,12 +7,14 @@ const mongoose = require('mongoose')
 const sharedSession = require('express-socket.io-session')
 const socketIo = require('socket.io')
 
+const authRouter = require('./routes/auth')
+
 const app = express()
 const server = http.Server(app)
 const io = socketIo(server)
 
 const session = expressSession({
-  secret: process.env.COOKIE_SECRET,
+  secret: process.env.COOKIE_SECRET || 'key',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
@@ -26,6 +28,8 @@ io.on('connection', socket => {
 
 app.use(bodyParser.json())
 app.use(session)
+
+app.use('/auth', authRouter)
 
 server.listen(3000, err => {
   if (err) throw err
