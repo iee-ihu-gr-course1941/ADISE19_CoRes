@@ -1,5 +1,7 @@
 const http = require('http')
 
+require('dotenv').config()
+
 const bodyParser = require('body-parser')
 const express = require('express')
 const expressSession = require('express-session')
@@ -31,12 +33,29 @@ app.use(session)
 
 app.use('/auth', authRouter)
 
-server.listen(3000, err => {
-  if (err) throw err
-  console.log('Listening...')
-})
+mongoose.set('useCreateIndex', true)
+mongoose.set('useUnifiedTopology', true)
+mongoose
+  .connect(
+    process.env.MONGODB_CLUSTER
+      ? `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${
+          process.env.MONGODB_CLUSTER
+        }`
+      : 'mongodb://localhost/monopoliee',
+    { useNewUrlParser: true }
+  )
+  .then(() => {
+    const port = process.env.PORT || 3000
+    server.listen(port, err => {
+      if (err) throw err
+      console.log(`Listening on port ${port}...`)
+    })
+  })
+  .catch(err => {
+    console.error(err)
+  })
 
 app.use(function (err, req, res, next) {
   console.error(err.stack)
-  res.status(500).send('Internal Server Error')
+  res.status(500).send({ error: { message: 'Internal Server Error' } })
 })
