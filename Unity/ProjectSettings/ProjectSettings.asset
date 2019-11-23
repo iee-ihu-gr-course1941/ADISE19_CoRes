@@ -542,7 +542,7 @@ PlayerSettings:
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
-  webGLTemplate: APPLICATION:Default
+  webGLTemplate: PROJECT:SocketIO
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 1
@@ -552,7 +552,8 @@ PlayerSettings:
   scriptingDefineSymbols: {}
   platformArchitecture: {}
   scriptingBackend: {}
-  il2cppCompilerConfiguration: {}
+  il2cppCompilerConfiguration:
+    WebGL: 1
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
   allowUnsafeCode: 0
