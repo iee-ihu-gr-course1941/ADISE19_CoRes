@@ -35,3 +35,8 @@ server.listen(3000, err => {
   if (err) throw err
   console.log('Listening...')
 })
+
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Internal Server Error')
+})
