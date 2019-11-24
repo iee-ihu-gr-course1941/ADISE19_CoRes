@@ -29,6 +29,7 @@ io.on('connection', socket => {
 })
 
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(session)
 
 app.use('/auth', authRouter)
