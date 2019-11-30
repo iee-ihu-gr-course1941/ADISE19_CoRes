@@ -8,6 +8,14 @@ const router = express.Router()
 
 module.exports = router
 
+router.get('/session', (req, res) => {
+  if (req.session.user) {
+    return res.json({ username: req.session.user.username })
+  }
+
+  return res.status(403).json({ error: { message: 'Not logged in' } })
+})
+
 router.post('/login', [
   check('username').isLength({ min: 4 }),
   check('password').isLength({ min: 6 })
@@ -31,7 +39,7 @@ router.post('/login', [
           _id: user.id,
           username: user.username
         }
-        return res.json({ message: 'Logged in successfully' })
+        return res.json({ username: user.username })
       }
     }
 
@@ -75,9 +83,12 @@ router.post('/register', [
       })
       await user.save()
 
-      req.session.user = { username: user.username }
+      req.session.user = {
+        _id: user.id,
+        username: user.username
+      }
 
-      return res.json({ message: 'User registered successfully' })
+      return res.json({ username: user.username })
     }
 
     return res.status(400).json({ error: { message: 'Username already exists' } })

@@ -1,76 +1,68 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class Login : MonoBehaviour
 {
     public TextInput username;
     public TextInput password;
+    public Submit submit;
+    public Status statusMessage;
 
-    public void OnLogin()
+    private void Awake()
     {
-        Debug.Log(username.Value);
-        Debug.Log(password.Value);
-        
-        StartCoroutine(Upload(ApiAction.Login));
-    }
-
-    public void OnLogout()
-    {
-        StartCoroutine(Upload(ApiAction.Logout));
-    }
-    
-    IEnumerator Upload(ApiAction action)
-    {
-        switch (action)
+        submit.Click += delegate(object sender, EventArgs args)
         {
-            case ApiAction.Login:
-                WWWForm form = new WWWForm();
-                form.AddField("username", username.Value);
-                form.AddField("password", password.Value);
-
-                using (UnityWebRequest www = UnityWebRequest.Post("http://localhost:3000/auth/login", form))
+            username.Highlight = false;
+            password.Highlight = false;
+            statusMessage.Value = "";
+            
+            AuthenticationManager.Instance.LoginFormSubmit(username.Value, password.Value, (response, error) =>
+            {
+                if (error != null)
                 {
-                    yield return www.SendWebRequest();
-
-                    if (www.isNetworkError || www.isHttpError)
+                    if (response["error"] != null)
                     {
-                        Debug.Log(www.error);
+                        statusMessage.Value = (string)response["error"]["message"];
+                    }
+                    else if (response["errors"] != null) 
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        JArray errors = (JArray) response["errors"];
+                        foreach (JToken err in errors.Children())
+                        {
+                            if ((string)err["msg"] == "Invalid value")
+                            {
+                                if ((string) err["param"] == "username")
+                                {
+                                    username.Highlight = true;
+                                }
+                                else if ((string) err["param"] == "password")
+                                {
+                                    password.Highlight = true;
+                                }
+                                else
+                                {
+                                    sb.AppendLine((string) err["msg"]);
+                                }
+                            }
+                        }
+
+                        if (sb.Length != 0)
+                        {
+                            statusMessage.Value = sb.ToString();
+                        }
                     }
                     else
                     {
-                        Debug.Log("Form upload complete!");
+                        Debug.Log(error);
                     }
-            
-                    Debug.Log(www.downloadHandler.text);
                 }
-                break;
-            case ApiAction.Logout:
-                using (UnityWebRequest www = UnityWebRequest.Get("http://localhost:3000/auth/logout"))
-                {
-                    yield return www.SendWebRequest();
-
-                    if (www.isNetworkError || www.isHttpError)
-                    {
-                        Debug.Log(www.error);
-                    }
-                    else
-                    {
-                        Debug.Log("Form upload complete!");
-                    }
-            
-                    Debug.Log(www.downloadHandler.text);
-                }
-                break;
-            default:
-                break;
-        }
-        
-    }
-
-    enum ApiAction
-    {
-        Login, Logout
+            });
+        };
     }
 }
