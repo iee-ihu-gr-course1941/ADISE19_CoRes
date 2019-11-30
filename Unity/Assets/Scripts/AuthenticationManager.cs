@@ -38,7 +38,10 @@ public class AuthenticationManager : MonoBehaviour
             }
             else
             {
-                throw new Exception(error);
+                if (response["error"] == null)
+                {
+                    throw new Exception(error);
+                }
             }
         });
     }
