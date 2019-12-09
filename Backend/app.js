@@ -3,6 +3,7 @@ const http = require('http')
 require('dotenv').config()
 
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const express = require('express')
 const expressSession = require('express-session')
 const logger = require('morgan')
@@ -29,6 +30,7 @@ io.on('connection', socket => {
   socket.emit('hi', { message: 'Success' })
 })
 
+app.use(cors())
 app.use(logger('short'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
