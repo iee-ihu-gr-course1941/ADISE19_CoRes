@@ -63,8 +63,16 @@ router.get('/logout', async (req, res, next) => {
     if (req.session.user) {
       if (req.session.game) {
         // TODO: Handle game disconnect
-        req.session.user.leftGame = false
-        await req.session.user.save()
+        await User.findByIdAndUpdate(
+          req.session.user._id,
+          {
+            $set: { disconnected: Date.now() }
+          },
+          {
+            runValidators: true,
+            select: '-passwordHash'
+          }
+        )
         delete req.session.game
       }
 
