@@ -1,0 +1,13 @@
+{
+  "game": {
+    "minPlayers": 2,
+    "maxPlayers": 4,
+    "initialBalance": 1500,
+
+    "status": [
+      "running",
+      "waitingPlayers",
+      "ended"
+    ]
+  }
+}

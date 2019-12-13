@@ -12,6 +12,7 @@ const sharedSession = require('express-socket.io-session')
 const socketIo = require('socket.io')
 
 const authRouter = require('./routes/auth')
+const gameRouter = require('./routes/game')
 
 const app = express()
 const server = http.Server(app)
@@ -37,9 +38,11 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(session)
 
 app.use('/auth', authRouter)
+app.use('/game', gameRouter)
 
 mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
+mongoose.set('useFindAndModify', false)
 mongoose
   .connect(
     process.env.MONGODB_CLUSTER
