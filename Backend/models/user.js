@@ -12,6 +12,15 @@ const userSchema = new Schema(
     passwordHash: {
       type: String,
       required: true
+    },
+    lastGame: { // TODO: Implement reconnect
+      type: Schema.Types.ObjectId,
+      required: false,
+      ref: 'Game'
+    },
+    disconnected: { // TODO: Implement disconnection detection
+      type: Date,
+      required: false
     }
   },
   { timestamps: true }
