@@ -27,7 +27,8 @@ const gameSchema = new Schema(
       jailed: {
         type: Boolean,
         required: true
-      }
+      },
+      _id: false
     }],
     properties: [{
       name: {
