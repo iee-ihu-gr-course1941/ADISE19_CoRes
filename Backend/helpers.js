@@ -1,6 +1,6 @@
 module.exports.transformUser = user => {
   const result = {
-    ...user._doc,
+    ...user.toJSON(),
     _id: user.id
   }
 

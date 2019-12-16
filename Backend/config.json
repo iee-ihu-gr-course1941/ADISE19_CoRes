@@ -8,6 +8,8 @@
       "running",
       "waitingPlayers",
       "ended"
-    ]
+    ],
+
+    "msToReconnect": 15000
   }
 }
