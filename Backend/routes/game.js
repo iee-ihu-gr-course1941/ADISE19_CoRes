@@ -167,6 +167,18 @@ router.post('/join', [
   }
 })
 
+router.get('/list', async (req, res, next) => {
+  try {
+    const games = await Game.find({
+      status: { $ne: 'ended' }
+    }).lean().exec()
+
+    res.json(games)
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.get('/leave', async (req, res, next) => {
   try {
     const errors = validationResult(req)
