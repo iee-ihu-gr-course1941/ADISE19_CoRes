@@ -56,6 +56,49 @@ public class APIWrapper : MonoBehaviour
     {
         StartCoroutine(Upload("auth/session", null, callcack));
     }
+    
+    public void GameNew(int seats, APICallcack callcack = null) => GameNew(seats, false, callcack);
+
+    public void GameNew(int seats, bool inviteOnly, APICallcack callcack = null)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("seats", seats);
+        if (inviteOnly)
+        {
+            form.AddField("invite_only", "true");
+        }
+
+        StartCoroutine(Upload("game/new", form, callcack));
+    }
+
+    public void GameJoin(string gameId, APICallcack callcack = null) => GameJoin(gameId, "", callcack);
+
+    public void GameJoin(string gameId, string invitationCode, APICallcack callcack = null)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("game_id", gameId);
+        if (!string.IsNullOrEmpty(invitationCode))
+        {
+            form.AddField("invitation_code", invitationCode);
+        }
+
+        StartCoroutine(Upload("game/join", form, callcack));
+    }
+
+    public void GameList(APICallcack callcack = null)
+    {
+        StartCoroutine(Upload("game/list", null, callcack));
+    }
+    
+    public void GameLeave(APICallcack callcack = null)
+    {
+        StartCoroutine(Upload("game/leave", null, callcack));
+    }
+    
+    public void GamePrices(APICallcack callcack = null)
+    {
+        StartCoroutine(Upload("game/prices", null, callcack));
+    }
 
     private IEnumerator Upload(string path, WWWForm form = null, APICallcack callcack = null)
     {
