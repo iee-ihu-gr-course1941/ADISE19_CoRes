@@ -45,7 +45,8 @@ router.post('/new', [
         jailed: false
       }],
       seats: req.body.seats,
-      status: 'waitingPlayers'
+      status: 'waitingPlayers',
+      properties: config.prices.properties
     })
     game = await game.save()
 
