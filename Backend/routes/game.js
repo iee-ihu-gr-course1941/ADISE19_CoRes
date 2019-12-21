@@ -239,3 +239,11 @@ router.get('/leave', async (req, res, next) => {
     next(err)
   }
 })
+
+router.get('/prices', (req, res, next) => {
+  try {
+    res.json(config.prices)
+  } catch (err) {
+    next(err)
+  }
+})
