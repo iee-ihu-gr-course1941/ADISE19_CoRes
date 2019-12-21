@@ -27,7 +27,7 @@ public class APIWrapper : MonoBehaviour
     }
     #endregion
 
-    public delegate void APICallcack(JObject response, string error = null);
+    public delegate void APICallcack(JToken response, string error = null);
     
     public void AuthLogin(string username, string password, APICallcack callcack = null)
     {
@@ -115,7 +115,7 @@ public class APIWrapper : MonoBehaviour
                 try
                 {
                     string resText = www.downloadHandler.text;
-                    JObject response = JObject.Parse(resText);
+                    JToken response = JToken.Parse(resText);
                     callcack(response, www.error);
                 }
                 catch (JsonException ex)

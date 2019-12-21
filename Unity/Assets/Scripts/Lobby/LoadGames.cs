@@ -1,34 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LoadGames : MonoBehaviour
 {
-    public List<string> gameList;
+    public List<Game> gameList;
     public Text noGamesFoundText;
     public GameObject mainScrollContentView;
     public GameObject contentDataPanel;
     // Start is called before the first frame update
     void Start()
     {
-        SetListData();
-        Initialize();
-    }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void SetListData()
-    {
-        gameList = new List<string>();
-        for (int i = 0; i < 20; i++)
+        APIWrapper.Instance.GameList((response, error) =>
         {
-            gameList.Add("Bruh" + i);   
-        }
+            if (error == null)
+            {
+                JArray games = (JArray) response;
+                gameList = new List<Game>(games.Count);
+                foreach (JToken game in games)
+                {
+                    gameList.Add(new Game(game));
+                }
+                Initialize();
+            }
+            else
+            {
+                Debug.Log(error);
+            }
+        });
     }
 
     void Initialize()
@@ -41,7 +42,7 @@ public class LoadGames : MonoBehaviour
                 GameObject playerTextPanel = Instantiate(contentDataPanel, mainScrollContentView.transform, true);
                 playerTextPanel.transform.localScale = new Vector3(1,1,1);
                 playerTextPanel.transform.localPosition = new Vector3(0,0,0);
-                playerTextPanel.transform.Find("Text").GetComponent<Text>().text = game;
+                playerTextPanel.transform.Find("Text").GetComponent<Text>().text = game.ToString();
             }
         }
         else

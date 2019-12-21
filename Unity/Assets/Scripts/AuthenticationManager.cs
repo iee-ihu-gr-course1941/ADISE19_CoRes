@@ -34,7 +34,7 @@ public class AuthenticationManager : MonoBehaviour
             if (error == null)
             {
                 user = (string)response["username"];
-                SceneManager.LoadScene("Game", LoadSceneMode.Single);
+                SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
             }
             else
             {
@@ -53,7 +53,7 @@ public class AuthenticationManager : MonoBehaviour
             if (error == null)
             {
                 user = (string)response["username"];
-                SceneManager.LoadScene("Game", LoadSceneMode.Single);
+                SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
             }
             else
             {
@@ -76,7 +76,7 @@ public class AuthenticationManager : MonoBehaviour
             if (error == null)
             {
                 user = (string)response["username"];
-                SceneManager.LoadScene("Game", LoadSceneMode.Single);
+                SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
             }
             else
             {
