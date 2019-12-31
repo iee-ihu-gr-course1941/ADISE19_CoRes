@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
@@ -17,33 +18,31 @@ namespace Schema
             }
 
             string propertyId = (string) property["_id"];
-            Property dProperty = _properties[propertyId];
 
-            if (dProperty == null)
+            if (!_properties.ContainsKey(propertyId))
             {
                 Property newProperty = new Property(property);
                 _properties.Add(propertyId, newProperty);
-                dProperty = newProperty;
             }
 
-            return dProperty;
+            return _properties[propertyId];;
         }
 
         #endregion
 
         private string _id;
         private string _name;
-        private User _owner;
+        private string _ownerId;
         private bool _mortgaged;
 
         public string Name => _name;
-        public User Owner => _owner;
+        public string OwnerId => _ownerId;
         public bool Mortgaged => _mortgaged;
 
         private Property(JToken property)
         {
             _name = (string) property["name"];
-            _owner = User.GetUser(property["owner"]);
+            _ownerId = (string) property["owner"];
         }
     }
 }

@@ -18,28 +18,26 @@ namespace Schema
                 _players = new Dictionary<string, Player>();
             }
 
-            string userId = User.GetUser(player["user"]).Id;
-            Player dPlayer = _players[userId];
+            string userId = (string) player["user"];
 
-            if (dPlayer == null)
+            if (!_players.ContainsKey(userId))
             {
                 Player newPlayer = new Player(player);
                 _players.Add(userId, newPlayer);
-                dPlayer = newPlayer;
             }
 
-            return dPlayer;
+            return _players[userId];
         }
 
         #endregion
         
-        private User _user;
+        private string _userId;
         private int _balance;
         private int _position;
         private int _duplicateRolls;
         private bool _jailed;
 
-        public User User => _user;
+        public string UserId => _userId;
         public int Balance => _balance;
         public int Position => _position;
         public int DuplicateRolls => _duplicateRolls;
@@ -47,7 +45,7 @@ namespace Schema
 
         private Player(JToken player)
         {
-            _user = User.GetUser(player["user"]);
+            _userId = (string) player["user"];
             _balance = (int) player["balance"];
             _position = (int) player["position"];
             _duplicateRolls = (int) player["duplicateRolls"];

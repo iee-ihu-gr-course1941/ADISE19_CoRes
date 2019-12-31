@@ -18,16 +18,14 @@ namespace Schema
             }
             
             string userId = (string) user["_id"];
-            User dUser = _users[userId];
 
-            if (dUser == null)
+            if (!_users.ContainsKey(userId))
             {
                 User newUser = new User(user);
                 _users.Add(userId, newUser);
-                dUser = newUser;
             }
 
-            return dUser;
+            return _users[userId];
         }
 
         #endregion

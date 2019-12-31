@@ -4,6 +4,8 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Schema;
+
 public class LoadGames : MonoBehaviour
 {
     public List<Game> gameList;
@@ -21,7 +23,7 @@ public class LoadGames : MonoBehaviour
                 gameList = new List<Game>(games.Count);
                 foreach (JToken game in games)
                 {
-                    gameList.Add(new Game(game));
+                    gameList.Add(Game.GetGame(game));
                 }
                 Initialize();
             }
@@ -42,7 +44,7 @@ public class LoadGames : MonoBehaviour
                 GameObject playerTextPanel = Instantiate(contentDataPanel, mainScrollContentView.transform, true);
                 playerTextPanel.transform.localScale = new Vector3(1,1,1);
                 playerTextPanel.transform.localPosition = new Vector3(0,0,0);
-                playerTextPanel.transform.Find("Text").GetComponent<Text>().text = game.ToString();
+                playerTextPanel.transform.Find("Text").GetComponent<Text>().text = game.SeatsToString();
             }
         }
         else

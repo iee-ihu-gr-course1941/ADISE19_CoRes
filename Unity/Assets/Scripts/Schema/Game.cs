@@ -18,16 +18,14 @@ namespace Schema
             }
             
             string gameId = (string) game["_id"];
-            Game dGame = _games[gameId];
 
-            if (dGame == null)
+            if (!_games.ContainsKey(gameId))
             {
                 Game newGame = new Game(game);
                 _games.Add(gameId, newGame);
-                dGame = newGame;
             }
-
-            return dGame;
+            
+            return _games[gameId];
         }
 
         #endregion
@@ -37,14 +35,14 @@ namespace Schema
         private List<Property> _properties;
         private int _seats;
         private string _status;
-        private User _currentPlayer;
+        private string _currentPlayerId;
 
         public string Id => _id;
         public List<Player> Players => _players;
         public List<Property> Properties => _properties;
         public int Seats => _seats;
         public string Status => _status;
-        public User CurrentPlayer => _currentPlayer;
+        public string CurrentPlayerId => _currentPlayerId;
 
         private Game(JToken game)
         {
@@ -53,7 +51,9 @@ namespace Schema
             _properties = ((JArray) game["properties"]).Select(Property.GetProperty).ToList();
             _seats = (int) game["seats"];
             _status = (string) game["status"];
-            _currentPlayer = User.GetUser(game["currentPlayer"]);
+            _currentPlayerId = (string) game["currentPlayer"];
         }
+
+        public string SeatsToString() => $"{_players.Count}/{_seats}";
     }
 }
