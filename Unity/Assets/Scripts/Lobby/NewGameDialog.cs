@@ -6,6 +6,8 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Schema;
+
 public class NewGameDialog : MonoBehaviour
 {
     public GameObject canvas;
@@ -51,6 +53,11 @@ public class NewGameDialog : MonoBehaviour
                                 }
                             }
                         }
+                    }
+                    else
+                    {
+                        Game game = Game.GetGame(response);
+                        GameManager.Instance.GoToGame(game);
                     }
                 });
             }

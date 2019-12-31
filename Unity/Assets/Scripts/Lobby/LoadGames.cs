@@ -45,6 +45,24 @@ public class LoadGames : MonoBehaviour
                 playerTextPanel.transform.localScale = new Vector3(1,1,1);
                 playerTextPanel.transform.localPosition = new Vector3(0,0,0);
                 playerTextPanel.transform.Find("Text").GetComponent<Text>().text = game.SeatsToString();
+                playerTextPanel.transform.Find("Join").GetComponent<Submit>().Click += (sender, args) =>
+                {
+                    APIWrapper.Instance.GameJoin(game.Id, (response, error) =>
+                    {
+                        if (error != null)
+                        {
+                            if (response["error"] != null)
+                            {
+                                Debug.Log((string) response["error"]["message"]);
+                            }
+                        }
+                        else
+                        {
+                            Game gameToJoin = Game.GetGame(response);
+                            GameManager.Instance.GoToGame(gameToJoin);
+                        }
+                    });
+                };
             }
         }
         else
