@@ -27,39 +27,39 @@ public class APIWrapper : MonoBehaviour
     }
     #endregion
 
-    public delegate void APICallcack(JToken response, string error = null);
+    public delegate void APICallback(JToken response, string error = null);
     
-    public void AuthLogin(string username, string password, APICallcack callcack = null)
+    public void AuthLogin(string username, string password, APICallback callback = null)
     {
         WWWForm form = new WWWForm();
         form.AddField("username", username);
         form.AddField("password", password);
 
-        StartCoroutine(Upload("auth/login", form, callcack));
+        StartCoroutine(Upload("auth/login", form, callback));
     }
 
-    public void AuthLogout(APICallcack callcack = null)
+    public void AuthLogout(APICallback callback = null)
     {
-        StartCoroutine(Upload("auth/logout", null, callcack));
+        StartCoroutine(Upload("auth/logout", null, callback));
     }
     
-    public void AuthRegister(string username, string password, APICallcack callcack = null)
+    public void AuthRegister(string username, string password, APICallback callback = null)
     {
         WWWForm form = new WWWForm();
         form.AddField("username", username);
         form.AddField("password", password);
 
-        StartCoroutine(Upload("auth/register", form, callcack));
+        StartCoroutine(Upload("auth/register", form, callback));
     }
 
-    public void AuthSession(APICallcack callcack = null)
+    public void AuthSession(APICallback callback = null)
     {
-        StartCoroutine(Upload("auth/session", null, callcack));
+        StartCoroutine(Upload("auth/session", null, callback));
     }
     
-    public void GameNew(int seats, APICallcack callcack = null) => GameNew(seats, false, callcack);
+    public void GameNew(int seats, APICallback callback = null) => GameNew(seats, false, callback);
 
-    public void GameNew(int seats, bool inviteOnly, APICallcack callcack = null)
+    public void GameNew(int seats, bool inviteOnly, APICallback callback = null)
     {
         WWWForm form = new WWWForm();
         form.AddField("seats", seats);
@@ -68,12 +68,12 @@ public class APIWrapper : MonoBehaviour
             form.AddField("invite_only", "true");
         }
 
-        StartCoroutine(Upload("game/new", form, callcack));
+        StartCoroutine(Upload("game/new", form, callback));
     }
 
-    public void GameJoin(string gameId, APICallcack callcack = null) => GameJoin(gameId, "", callcack);
+    public void GameJoin(string gameId, APICallback callback = null) => GameJoin(gameId, "", callback);
 
-    public void GameJoin(string gameId, string invitationCode, APICallcack callcack = null)
+    public void GameJoin(string gameId, string invitationCode, APICallback callback = null)
     {
         WWWForm form = new WWWForm();
         form.AddField("game_id", gameId);
@@ -82,30 +82,30 @@ public class APIWrapper : MonoBehaviour
             form.AddField("invitation_code", invitationCode);
         }
 
-        StartCoroutine(Upload("game/join", form, callcack));
+        StartCoroutine(Upload("game/join", form, callback));
     }
 
-    public void GameList(APICallcack callcack = null)
+    public void GameList(APICallback callback = null)
     {
-        StartCoroutine(Upload("game/list", null, callcack));
+        StartCoroutine(Upload("game/list", null, callback));
     }
 
-    public void GameCurrent(APICallcack callcack = null)
+    public void GameCurrent(APICallback callback = null)
     {
-        StartCoroutine(Upload("game/current", null, callcack));
+        StartCoroutine(Upload("game/current", null, callback));
     }
     
-    public void GameLeave(APICallcack callcack = null)
+    public void GameLeave(APICallback callback = null)
     {
-        StartCoroutine(Upload("game/leave", null, callcack));
+        StartCoroutine(Upload("game/leave", null, callback));
     }
     
-    public void GamePrices(APICallcack callcack = null)
+    public void GamePrices(APICallback callback = null)
     {
-        StartCoroutine(Upload("game/prices", null, callcack));
+        StartCoroutine(Upload("game/prices", null, callback));
     }
 
-    private IEnumerator Upload(string path, WWWForm form = null, APICallcack callcack = null)
+    private IEnumerator Upload(string path, WWWForm form = null, APICallback callback = null)
     {
          // TODO: Hardcoded URL
         using (UnityWebRequest www = 
@@ -115,17 +115,17 @@ public class APIWrapper : MonoBehaviour
         {
             yield return www.SendWebRequest();
 
-            if (callcack != null)
+            if (callback != null)
             {
                 try
                 {
                     string resText = www.downloadHandler.text;
                     JToken response = JToken.Parse(resText);
-                    callcack(response, www.error);
+                    callback(response, www.error);
                 }
                 catch (JsonException ex)
                 {
-                    callcack(null, ex.Message);
+                    callback(null, ex.Message);
                 }
             }
         }

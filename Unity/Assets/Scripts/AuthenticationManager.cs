@@ -46,7 +46,7 @@ public class AuthenticationManager : MonoBehaviour
         });
     }
 
-    public void LoginFormSubmit(string username, string password, APIWrapper.APICallcack callback = null)
+    public void LoginFormSubmit(string username, string password, APIWrapper.APICallback callback = null)
     {
         APIWrapper.Instance.AuthLogin(username, password, (response, error) =>
         {
@@ -69,7 +69,7 @@ public class AuthenticationManager : MonoBehaviour
         });
     }
     
-    public void RegisterFormSubmit(string username, string password, APIWrapper.APICallcack callback = null)
+    public void RegisterFormSubmit(string username, string password, APIWrapper.APICallback callback = null)
     {
         APIWrapper.Instance.AuthRegister(username, password, (response, error) =>
         {
@@ -92,7 +92,7 @@ public class AuthenticationManager : MonoBehaviour
         });
     }
 
-    public void Logout(APIWrapper.APICallcack callback = null)
+    public void Logout(APIWrapper.APICallback callback = null)
     {
         APIWrapper.Instance.AuthLogout((response, error) =>
         {
