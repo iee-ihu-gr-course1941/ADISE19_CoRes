@@ -90,6 +90,10 @@ router.post('/join', [
 
     // Check for active game
     if (req.session.game) {
+      if (req.session.game._id === req.body.game_id) {
+        // TODO: Trigger player reconnect
+        return req.session.game
+      }
       return res.status(400).json({ error: { message: 'Already in game' } })
     }
 
