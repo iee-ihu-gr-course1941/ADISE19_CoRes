@@ -89,6 +89,11 @@ public class APIWrapper : MonoBehaviour
     {
         StartCoroutine(Upload("game/list", null, callcack));
     }
+
+    public void GameCurrent(APICallcack callcack = null)
+    {
+        StartCoroutine(Upload("game/current", null, callcack));
+    }
     
     public void GameLeave(APICallcack callcack = null)
     {
