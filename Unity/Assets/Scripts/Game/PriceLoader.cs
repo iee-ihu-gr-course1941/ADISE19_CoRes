@@ -24,7 +24,6 @@ public class PriceLoader : MonoBehaviour
                 {
                     int p = (int) price["price"];
                     propertiesPrices.Add(p);
-                    Debug.Log(p);
                 }
                 prices = (JArray) response["taxes"];
                 taxesPrices = new List<int>(prices.Count);
@@ -32,7 +31,6 @@ public class PriceLoader : MonoBehaviour
                 {
                     int p = (int) price["price"];
                     taxesPrices.Add(p);
-                    Debug.Log(p);
                 }
                 LoadPrices();
             }
