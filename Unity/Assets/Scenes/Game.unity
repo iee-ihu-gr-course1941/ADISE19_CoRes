@@ -963,6 +963,7 @@ GameObject:
   - component: {fileID: 266948389}
   - component: {fileID: 266948388}
   - component: {fileID: 266948387}
+  - component: {fileID: 266948390}
   m_Layer: 0
   m_Name: Properties
   m_TagString: Untagged
@@ -1072,6 +1073,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266948385}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &266948390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266948385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 120cc741f8f13e84f97cc899d4439f76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pricesList: []
 --- !u!1 &287484648
 GameObject:
   m_ObjectHideFlags: 0
@@ -5747,6 +5761,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1425012443}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1466869433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1466869435}
+  - component: {fileID: 1466869434}
+  m_Layer: 0
+  m_Name: PriceLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1466869434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466869433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582a7f89f56f79942924dd2155142fa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propertiesPrices: 
+  taxesPrices: 
+  properties: {fileID: 266948390}
+  taxes: {fileID: 1532058835}
+--- !u!4 &1466869435
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466869433}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.18907636, y: -5.759548, z: 4.4579544}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1482300080
 GameObject:
   m_ObjectHideFlags: 0
@@ -5943,6 +6004,7 @@ GameObject:
   - component: {fileID: 1532058834}
   - component: {fileID: 1532058833}
   - component: {fileID: 1532058832}
+  - component: {fileID: 1532058835}
   m_Layer: 0
   m_Name: Taxes
   m_TagString: Untagged
@@ -6026,6 +6088,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532058830}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1532058835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532058830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff30801e5d729924c9b509e211ec3967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pricesList: []
 --- !u!1 &1537810278
 GameObject:
   m_ObjectHideFlags: 0
