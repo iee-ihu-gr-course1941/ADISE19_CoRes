@@ -6,9 +6,7 @@ using UnityEngine;
 
 public class PriceLoader : MonoBehaviour
 {
-    public List<int> propertiesPrices;
-    public List<int> taxesPrices;
-    public JArray prices;
+    public JToken prices;
     public Properties properties;
     public Taxes taxes;
 
@@ -18,21 +16,25 @@ public class PriceLoader : MonoBehaviour
         {
             if (error == null)
             {
-                prices = (JArray) response["properties"];
-                propertiesPrices = new List<int>(prices.Count);
-                foreach (var price in prices)
+                JArray propertyPricesArray = (JArray) response["properties"];
+                List<int> propertyPrices = new List<int>(propertyPricesArray.Count);
+                foreach (var price in propertyPricesArray)
                 {
                     int p = (int) price["price"];
-                    propertiesPrices.Add(p);
+                    propertyPrices.Add(p);
                 }
-                prices = (JArray) response["taxes"];
-                taxesPrices = new List<int>(prices.Count);
-                foreach (var price in prices)
+                
+                JArray taxPricesArray  = (JArray) response["taxes"];
+                List<int> taxPrices = new List<int>(taxPricesArray.Count);
+                foreach (var price in taxPricesArray)
                 {
                     int p = (int) price["price"];
-                    taxesPrices.Add(p);
+                    taxPrices.Add(p);
                 }
-                LoadPrices();
+
+                prices = response;
+
+                LoadPrices(propertyPrices, taxPrices);
             }
             else
             {
@@ -41,15 +43,16 @@ public class PriceLoader : MonoBehaviour
         });
     }
 
-   public void LoadPrices()
+   private void LoadPrices(List<int> propertyPrices, List<int> taxPrices)
     {
-        for (int i = 0; i < propertiesPrices.Count; i++)
+        for (int i = 0; i < propertyPrices.Count; i++)
         {
-            properties.pricesList[i].text = propertiesPrices[i] + "ΔΜ";
+            properties.pricesList[i].text = propertyPrices[i] + "ΔΜ";
         }
-        for (int i = 0; i < taxesPrices.Count; i++)
+        
+        for (int i = 0; i < taxPrices.Count; i++)
         {
-            taxes.pricesList[i].text = taxesPrices[i] + "ΔΜ";
+            taxes.pricesList[i].text = taxPrices[i] + "ΔΜ";
         }
     }
 }
