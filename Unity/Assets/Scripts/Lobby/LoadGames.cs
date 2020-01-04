@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 using Schema;
+using Debug = UnityEngine.Debug;
 
 public class LoadGames : MonoBehaviour
 {
@@ -15,21 +17,16 @@ public class LoadGames : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        APIWrapper.Instance.GameList((response, error) =>
+        APIWrapper.Instance.GameCurrent((response, error) =>
         {
             if (error == null)
             {
-                JArray games = (JArray) response;
-                gameList = new List<Game>(games.Count);
-                foreach (JToken game in games)
-                {
-                    gameList.Add(Game.GetGame(game));
-                }
-                Initialize();
+                Game gameToJoin = Game.GetGame(response);
+                GameManager.Instance.GoToGame(gameToJoin);
             }
             else
             {
-                Debug.Log(error);
+                LoadGameList();
             }
         });
     }
@@ -38,7 +35,6 @@ public class LoadGames : MonoBehaviour
     {
         if (gameList.Count > 0) {
             HideNoGamesFoundText();
-            RectTransform rt = (RectTransform) mainScrollContentView.transform;
             foreach (var game in gameList)
             {
                 GameObject playerTextPanel = Instantiate(contentDataPanel, mainScrollContentView.transform, true);
@@ -69,6 +65,27 @@ public class LoadGames : MonoBehaviour
         {
             ShowNoGamesFoundText();
         }
+    }
+    
+    void LoadGameList()
+    {
+        APIWrapper.Instance.GameList((response, error) =>
+        {
+            if (error == null)
+            {
+                JArray games = (JArray) response;
+                gameList = new List<Game>(games.Count);
+                foreach (JToken game in games)
+                {
+                    gameList.Add(Game.GetGame(game));
+                }
+                Initialize();
+            }
+            else
+            {
+                Debug.Log(error);
+            }
+        });
     }
 
     void ShowNoGamesFoundText()
