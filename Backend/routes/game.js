@@ -185,12 +185,16 @@ router.get('/list', async (req, res, next) => {
 })
 
 router.get('/current', async (req, res, next) => {
-  // Check for active game
-  if (!req.session.game) {
-    return res.status(400).json({ error: { message: 'User is not playing any games' } })
-  }
+  try {
+    // Check for active game
+    if (!req.session.game) {
+      return res.status(400).json({ error: { message: 'User is not playing any games' } })
+    }
 
-  return req.session.game
+    res.json(req.session.game)
+  } catch (err) {
+    next(err)
+  }
 })
 
 router.get('/leave', async (req, res, next) => {
