@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PropertyCard
 {
-    public new string name;
+    public string name;
     public string color;
     public int location;
     public int[] rents;

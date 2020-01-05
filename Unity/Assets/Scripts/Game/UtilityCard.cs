@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UtilityCard
 {
-    public new string name;
+    public string name;
     public int location;
     public int[] rents;
     public int mortgage;
