@@ -18,6 +18,7 @@
       {
         "name": "Τμήμα Γεωπονίας",
         "type": 0,
+        "color": "854a38",
         "location": 1,
         "price": 60,
         "rents": [
@@ -33,6 +34,7 @@
       {
         "name": "Τμήμα Δασολογίας",
         "type": 0,
+        "color": "854a38",
         "location": 3,
         "price": 60,
         "rents": [
@@ -61,6 +63,7 @@
       {
         "name": "Τμήμα Δημόσιας Διοίκησης",
         "type": 0,
+        "color": "acdcf0",
         "location": 6,
         "price": 100,
         "rents": [
@@ -76,6 +79,7 @@
       {
         "name": "Τμήμα Διοίκησης Εφοδ. Αλυσίδας",
         "type": 0,
+        "color": "acdcf0",
         "location": 8,
         "price": 100,
         "rents": [
@@ -91,6 +95,7 @@
       {
         "name": "Τμήμα Μάρκετινγκ",
         "type": 0,
+        "color": "acdcf0",
         "location": 9,
         "price": 120,
         "rents": [
@@ -106,6 +111,7 @@
       {
         "name": "Τμήμα Βιοϊατρικών Επιστημών",
         "type": 0,
+        "color": "c53783",
         "location": 11,
         "price": 140,
         "rents": [
@@ -132,6 +138,7 @@
       {
         "name": "Τμήμα Επιστημών Διατροφής",
         "type": 0,
+        "color": "c53783",
         "location": 13,
         "price": 140,
         "rents": [
@@ -147,6 +154,7 @@
       {
         "name": "Τμήμα Φυσικοθεραπείας",
         "type": 0,
+        "color": "c53783",
         "location": 14,
         "price": 160,
         "rents": [
@@ -175,6 +183,7 @@
       {
         "name": "Τμήμα Λογιστικής",
         "type": 0,
+        "color": "ec8b2c",
         "location": 16,
         "price": 180,
         "rents": [
@@ -190,6 +199,7 @@
       {
         "name": "Τμήμα Οικονομικών Επιστημών",
         "type": 0,
+        "color": "ec8b2c",
         "location": 18,
         "price": 180,
         "rents": [
@@ -205,6 +215,7 @@
       {
         "name": "Τμήμα Οργαν. και Διοικησης Επιχειρησεων",
         "type": 0,
+        "color": "ec8b2c",
         "location": 19,
         "price": 200,
         "rents": [
@@ -220,6 +231,7 @@
       {
         "name": "Τμήμα Αρχειονομίας",
         "type": 0,
+        "color": "d92226",
         "location": 21,
         "price": 220,
         "rents": [
@@ -235,6 +247,7 @@
       {
         "name": "Τμήμα Μουσειολογίας",
         "type": 0,
+        "color": "d92226",
         "location": 23,
         "price": 220,
         "rents": [
@@ -250,6 +263,7 @@
       {
         "name": "Τμήμα Ανατολικών Γλωσσών",
         "type": 0,
+        "color": "d92226",
         "location": 24,
         "price": 240,
         "rents": [
@@ -278,6 +292,7 @@
       {
         "name": "Τμήμα Μηχ. Παραγωγής και Διοίκησης",
         "type": 0,
+        "color": "fff10c",
         "location": 26,
         "price": 260,
         "rents": [
@@ -293,6 +308,7 @@
       {
         "name": "Τμήμα Μηχανικών Περιβάλλοντος",
         "type": 0,
+        "color": "fff10c",
         "location": 27,
         "price": 260,
         "rents": [
@@ -319,6 +335,7 @@
       {
         "name": "Τμήμα Μηχαν. Πληρ. και Ηλεκτρ. Συστημ.",
         "type": 0,
+        "color": "fff10c",
         "location": 29,
         "price": 280,
         "rents": [
@@ -334,6 +351,7 @@
       {
         "name": "Τμήμα Βιολογίας",
         "type": 0,
+        "color": "1ea556",
         "location": 31,
         "price": 300,
         "rents": [
@@ -349,6 +367,7 @@
       {
         "name": "Τμήμα Φυσικής",
         "type": 0,
+        "color": "1ea556",
         "location": 32,
         "price": 300,
         "rents": [
@@ -364,6 +383,7 @@
       {
         "name": "Τμήμα Χημείας",
         "type": 0,
+        "color": "1ea556",
         "location": 34,
         "price": 320,
         "rents": [
@@ -392,6 +412,7 @@
       {
         "name": "Τμήμα Μαιευτικής",
         "type": 0,
+        "color": "0067a4",
         "location": 37,
         "price": 350,
         "rents": [
@@ -407,6 +428,7 @@
       {
         "name": "Τμήμα Νοσηλευτικής",
         "type": 0,
+        "color": "0067a4",
         "location": 39,
         "price": 400,
         "rents": [
