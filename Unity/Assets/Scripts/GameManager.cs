@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,12 +28,34 @@ public class GameManager : MonoBehaviour
     }
     
     #endregion
-
+    
     private Game _game;
+
+    public enum Turn
+    {
+        PLAYER1, PLAYER2, PLAYER3, PLAYER4
+    }
+    public Turn currentPlayerTurn = Turn.PLAYER1;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            NextTurn();
+        }
+    }
 
     public void GoToGame(Game game)
     {
         _game = game;
         SceneManager.LoadScene("Game", LoadSceneMode.Single);
+    }
+    
+    public void NextTurn()
+    {
+        var length = System.Enum.GetNames(typeof(Turn)).Length;
+        currentPlayerTurn = (Turn)(
+            ((int)currentPlayerTurn + 1) % length
+        );
     }
 }

@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private int routePosition;
     
     public int steps;
+    public float rotationSpeed;
 
     private bool isMoving;
 
@@ -44,6 +45,10 @@ public class PlayerMovement : MonoBehaviour
             while (Step(nextPos)) { yield return null; }
             yield return new WaitForSeconds(0.1f);
             steps--;
+            if (routePosition % 10 == 0)
+            {
+                transform.Rotate(0, 90, 0);
+            }
         }
 
         isMoving = false;
