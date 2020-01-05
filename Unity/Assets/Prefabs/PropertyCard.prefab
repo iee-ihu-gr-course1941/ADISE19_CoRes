@@ -464,7 +464,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3554437232720799569}
   - component: {fileID: 3554437232720799571}
-  - component: {fileID: 3554437232720799568}
   m_Layer: 5
   m_Name: PropertyCard
   m_TagString: Untagged
@@ -511,31 +510,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3554437232720799574}
   m_CullTransparentMesh: 0
---- !u!114 &3554437232720799568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3554437232720799574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a43f8b7aef67504f9b3b914e62ac7a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  card: {fileID: 11400000, guid: 7bdbb8666f645f546883e328fe9e784a, type: 2}
-  nameText: {fileID: 3554437233046330480}
-  rentText:
-  - {fileID: 3554437232528805123}
-  - {fileID: 3554437232997643842}
-  - {fileID: 3554437233824113876}
-  - {fileID: 3554437233830219385}
-  - {fileID: 3554437231817590678}
-  - {fileID: 3554437232085690777}
-  bookCostText: {fileID: 3554437233221014113}
-  degreeCostText: {fileID: 3554437233364311993}
-  mortgageText: {fileID: 3554437232603762526}
-  artworkImage: {fileID: 3554437231936464739}
 --- !u!1 &3554437232997643840
 GameObject:
   m_ObjectHideFlags: 0
