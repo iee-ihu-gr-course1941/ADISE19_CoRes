@@ -13,6 +13,7 @@ public class PropertyCardDisplay : MonoBehaviour
     public Text degreeCostText;
     public Text mortgageText;
 
+    public Image color;
     public Image artworkImage;
     
     // Start is called before the first frame update
@@ -29,6 +30,10 @@ public class PropertyCardDisplay : MonoBehaviour
         degreeCostText.text = card.mortgage.ToString();
         mortgageText.text = card.mortgage.ToString();
 
+        Color cardColor;
+        ColorUtility.TryParseHtmlString('#' + card.color, out cardColor);
+        color.color = cardColor;
+        
         artworkImage.sprite = card.artwork;
     }
 }

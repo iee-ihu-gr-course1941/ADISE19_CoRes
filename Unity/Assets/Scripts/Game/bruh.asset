@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: bruh
   m_EditorClassIdentifier: 
   name: Bruh
+  color: 0067a4
   location: 1
   price: 100
   rents: 010000000200000003000000040000000500000006000000

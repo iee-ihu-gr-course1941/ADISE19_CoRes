@@ -6,6 +6,7 @@ using UnityEngine;
 public class PropertyCard : ScriptableObject
 {
     public new string name;
+    public string color;
     public int location;
     public int price;
     public int[] rents;
