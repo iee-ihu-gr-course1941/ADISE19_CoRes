@@ -6,12 +6,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Schema;
+using TMPro;
 using Debug = UnityEngine.Debug;
 
 public class LoadGames : MonoBehaviour
 {
     public List<Game> gameList;
-    public Text noGamesFoundText;
+    public TextMeshProUGUI noGamesFoundText;
     public GameObject mainScrollContentView;
     public GameObject contentDataPanel;
     // Start is called before the first frame update
@@ -40,7 +41,7 @@ public class LoadGames : MonoBehaviour
                 GameObject playerTextPanel = Instantiate(contentDataPanel, mainScrollContentView.transform, true);
                 playerTextPanel.transform.localScale = new Vector3(1,1,1);
                 playerTextPanel.transform.localPosition = new Vector3(0,0,0);
-                playerTextPanel.transform.Find("Text").GetComponent<Text>().text = game.SeatsToString();
+                playerTextPanel.transform.Find("WaitingText").GetComponent<TextMeshProUGUI>().text = "Waiting for players " + game.SeatsToString();
                 playerTextPanel.transform.Find("Join").GetComponent<Submit>().Click += (sender, args) =>
                 {
                     APIWrapper.Instance.GameJoin(game.Id, (response, error) =>
@@ -67,7 +68,7 @@ public class LoadGames : MonoBehaviour
         }
     }
     
-    void LoadGameList()
+    public void LoadGameList()
     {
         APIWrapper.Instance.GameList((response, error) =>
         {
