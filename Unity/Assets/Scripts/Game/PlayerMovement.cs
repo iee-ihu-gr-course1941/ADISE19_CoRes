@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private int routePosition;
     
     public int steps;
-    public float rotationSpeed;
+    public float rotationTime = 1f;
 
     private bool isMoving;
 
@@ -47,11 +47,21 @@ public class PlayerMovement : MonoBehaviour
             steps--;
             if (routePosition % 10 == 0)
             {
-                transform.Rotate(0, 90, 0);
+                yield return StartCoroutine(RotateMe(Vector3.up * 90, rotationTime));
             }
         }
 
         isMoving = false;
+    }
+    
+    IEnumerator RotateMe(Vector3 byAngles, float inTime) 
+    {    var fromAngle = transform.rotation;
+        var toAngle = Quaternion.Euler(transform.eulerAngles + byAngles);
+        for(var t = 0f; t <= 1; t += Time.deltaTime/inTime) {
+            transform.rotation = Quaternion.Slerp(fromAngle, toAngle, t);
+            yield return null;
+        }
+        transform.rotation = toAngle;
     }
 
     bool Step(Vector3 goal)
