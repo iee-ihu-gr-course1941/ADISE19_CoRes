@@ -8,6 +8,7 @@ const express = require('express')
 const expressSession = require('express-session')
 const logger = require('morgan')
 const mongoose = require('mongoose')
+const proxy = require('http-proxy-middleware')
 const sharedSession = require('express-socket.io-session')
 const socketIo = require('socket.io')
 
@@ -43,6 +44,15 @@ app.use(gameMiddleware)
 
 app.use('/auth', authRouter)
 app.use('/game', gameRouter)
+
+app.use(proxy('/mock-client', {
+  target: 'http://localhost:3001',
+  changeOrigin: true,
+  ws: true,
+  pathRewrite: {
+    '^/mock-client': '/'
+  }
+}))
 
 mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
