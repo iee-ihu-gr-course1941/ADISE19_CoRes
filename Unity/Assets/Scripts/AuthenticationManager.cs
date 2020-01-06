@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Schema;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -25,7 +26,7 @@ public class AuthenticationManager : MonoBehaviour
     }
     #endregion
 
-    public string user;
+    public User user;
 
     public void Start()
     {
@@ -33,7 +34,7 @@ public class AuthenticationManager : MonoBehaviour
         {
             if (error == null)
             {
-                user = (string)response["username"];
+                user = User.GetUser(response["user"]);
                 SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
             }
             else
@@ -52,7 +53,7 @@ public class AuthenticationManager : MonoBehaviour
         {
             if (error == null)
             {
-                user = (string)response["username"];
+                user = User.GetUser(response["user"]);
                 SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
             }
             else
@@ -75,7 +76,7 @@ public class AuthenticationManager : MonoBehaviour
         {
             if (error == null)
             {
-                user = (string)response["username"];
+                user = User.GetUser(response["user"]);
                 SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
             }
             else
@@ -98,7 +99,7 @@ public class AuthenticationManager : MonoBehaviour
         {
             if (error == null)
             {
-                user = "";
+                user = null;
                 SceneManager.LoadScene("Login", LoadSceneMode.Single);
             }
             else
