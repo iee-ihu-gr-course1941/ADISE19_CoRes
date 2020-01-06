@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Status : MonoBehaviour
 {
-    private Text _text;
+    private TextMeshProUGUI _text;
     
     public string Value
     {
@@ -16,6 +17,6 @@ public class Status : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        _text = GetComponentInChildren<Text>();
+        _text = GetComponentInChildren<TextMeshProUGUI>();
     }
 }
