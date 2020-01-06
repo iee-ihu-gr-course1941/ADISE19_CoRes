@@ -5,7 +5,9 @@ const { check, validationResult } = require('express-validator')
 
 const Game = require('../models/game')
 const User = require('../models/user')
-const helpers = require('../helpers')
+const helpers = require('../library/helpers')
+
+const GameError = require('../library/gameError')
 
 const router = express.Router()
 
@@ -31,31 +33,18 @@ router.post('/new', [
     }
 
     // Check for active game
-    if (req.session.game) {
+    if (res.locals.game.current()) {
       return res.status(400).json({ error: { message: 'Already in game' } })
     }
 
-    // Initialize Game
-    let game = new Game({
-      players: [{
-        user: req.session.user._id,
-        balance: config.game.initialBalance,
-        position: 0,
-        duplicateRolls: 0,
-        jailed: false
-      }],
-      seats: req.body.seats,
-      status: 'waitingPlayers',
-      properties: config.prices.properties
-    })
-    game = await game.save()
+    const game = await res.locals.game.create(req.body.seats)
 
     // Update User in database
     const user = await User.findByIdAndUpdate(
       req.session.user._id,
       {
         $set: {
-          lastGame: game.id,
+          lastGame: game.getJSON()._id,
           disconnected: 0
         }
       },
@@ -68,12 +57,13 @@ router.post('/new', [
 
     // Update session
     req.session.user = helpers.transformUser(user)
-    req.session.game = game.toJSON()
 
-    // TODO: Trigger game join event
-
-    return res.json(game.toJSON())
+    return res.json(game.getJSON())
   } catch (err) {
+    if (err instanceof GameError) {
+      return res.status(400).json(err.toJSON())
+    }
+
     next(err)
   }
 })
@@ -89,67 +79,23 @@ router.post('/join', [
     }
 
     // Check for active game
-    if (req.session.game) {
-      if (req.session.game._id === req.body.game_id) {
+    if (res.locals.game.current()) {
+      const game = res.locals.game.current()
+      if (game._id === req.body.game_id) {
         // TODO: Trigger player reconnect
-        return req.session.game
+        return game
       }
       return res.status(400).json({ error: { message: 'Already in game' } })
     }
 
-    // Find game in DB
-    const game = await Game.findById(req.body.game_id)
-
-    // Check if game was found
-    if (!game) {
-      return res.status(404).json({ error: { message: 'Game not found' } })
-    }
-
-    // Check if user is in game.players
-    const playerIndex = game.players.findIndex(p => p.user.toString() === req.session.user._id)
-    if (playerIndex >= 0) { // Reconnect if user was left in that game
-      if (game.status === 'ended') {
-        return res.status(400).json({ error: { message: 'Game has ended' } })
-      }
-
-      if (game.status === 'running') {
-        const disconnectTime = new Date(req.session.user.disconnected).getTime()
-        if (disconnectTime + config.game.msToReconnect < Date.now()) {
-          // TODO: Player should have automatically been kicked from game by this time
-          return res.status(400).json({ error: { message: 'You cannot reconnect to this game' } })
-        }
-      }
-    } else { // Try to join game
-      // Check for empty seats
-      if (game.players.length > game.seats) {
-        // TODO: Unexpected behavior
-        return res.status(501).json({ error: { message: 'Game has more players than expected' } })
-      } else if (game.players.length === game.seats) {
-        return res.status(400).json({ error: { message: 'Game is full' } })
-      }
-
-      // Check game status
-      if (game.status !== 'waitingPlayers') {
-        return res.status(400).json({ error: { message: 'This game is not waiting for players to join' } })
-      }
-
-      // Add user to game.players
-      game.players.push({
-        user: req.session.user._id,
-        balance: config.game.initialBalance,
-        position: 0,
-        duplicateRolls: 0,
-        jailed: false
-      })
-      await game.save()
-    }
+    const game = await res.locals.game.join(req.body.game_id)
 
     // Update User in database
     const user = await User.findByIdAndUpdate(
       req.session.user._id,
       {
         $set: {
-          lastGame: game.id,
+          lastGame: game.getJSON()._id,
           disconnected: 0
         }
       },
@@ -162,12 +108,15 @@ router.post('/join', [
 
     // Update session
     req.session.user = helpers.transformUser(user)
-    req.session.game = game.toJSON()
 
     // TODO: Trigger game join event
 
-    return res.json(game.toJSON())
+    return res.json(game)
   } catch (err) {
+    if (err instanceof GameError) {
+      return res.status(400).json(err.toJSON())
+    }
+
     next(err)
   }
 })
@@ -180,6 +129,10 @@ router.get('/list', async (req, res, next) => {
 
     res.json(games)
   } catch (err) {
+    if (err instanceof GameError) {
+      return res.status(400).json(err.toJSON())
+    }
+
     next(err)
   }
 })
@@ -187,11 +140,12 @@ router.get('/list', async (req, res, next) => {
 router.get('/current', async (req, res, next) => {
   try {
     // Check for active game
-    if (!req.session.game) {
+    const game = res.locals.game.current()
+    if (!game) {
       return res.status(400).json({ error: { message: 'User is not playing any games' } })
     }
 
-    res.json(req.session.game)
+    res.json(game)
   } catch (err) {
     next(err)
   }
@@ -204,39 +158,14 @@ router.get('/leave', async (req, res, next) => {
       return res.status(422).json({ errors: errors.array() })
     }
 
-    // Check for active game
-    if (!req.session.game) {
-      return res.status(400).json({ error: { message: 'User is not playing any games' } })
-    }
-
-    // Find game in DB
-    const game = await Game.findById(req.session.game._id)
-
-    // Check if game was found
-    if (!game) {
-      // TODO: Unexpected behavior
-      return res.status(501).json({ error: { message: 'Game not found' } })
-    }
-
-    // Check if user is in game.players
-    const playerIndex = game.players.findIndex(p => p.user.toString() === req.session.user._id)
-    if (playerIndex < 0) {
-      // TODO: Unexpected behavior
-      return res.status(501).json({ error: { message: 'User is not playing in this game' } })
-    }
-
-    // Remove user from game.players
-    game.players.splice(playerIndex, 1)
-    await game.save()
-
-    // TODO: Trigger game leave event
+    const game = await res.locals.game.leave()
 
     // Update User in database
     const user = await User.findByIdAndUpdate(
       req.session.user._id,
       {
         $set: {
-          lastGame: game.id,
+          lastGame: game.getJSON().id,
           disconnected: 0
         }
       },
@@ -249,10 +178,13 @@ router.get('/leave', async (req, res, next) => {
 
     // Update session
     req.session.user = helpers.transformUser(user)
-    delete req.session.game
 
     return res.json({ message: 'Left game successfully' })
   } catch (err) {
+    if (err instanceof GameError) {
+      return res.status(400).json(err.toJSON())
+    }
+
     next(err)
   }
 })

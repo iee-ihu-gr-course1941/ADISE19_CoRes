@@ -11,6 +11,8 @@ const mongoose = require('mongoose')
 const sharedSession = require('express-socket.io-session')
 const socketIo = require('socket.io')
 
+const gameMiddleware = require('./middleware/game')
+
 const authRouter = require('./routes/auth')
 const gameRouter = require('./routes/game')
 
@@ -36,6 +38,8 @@ app.use(logger('short'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(session)
+
+app.use(gameMiddleware)
 
 app.use('/auth', authRouter)
 app.use('/game', gameRouter)

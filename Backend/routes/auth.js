@@ -3,7 +3,7 @@ const express = require('express')
 const { check, validationResult } = require('express-validator')
 
 const User = require('../models/user')
-const helpers = require('../helpers')
+const helpers = require('../library/helpers')
 
 const router = express.Router()
 
@@ -13,7 +13,7 @@ router.get('/session', (req, res) => {
   if (req.session.user) {
     return res.json({
       user: req.session.user,
-      in_game: req.session.game != null,
+      in_game: Boolean(res.locals.game.current()),
       was_disconnected: !req.session.user.leftGame // True: Player logged out or lost connection during last game
     })
   }
@@ -61,7 +61,7 @@ router.post('/login', [
 router.get('/logout', async (req, res, next) => {
   try {
     if (req.session.user) {
-      if (req.session.game) {
+      if (res.locals.game.current()) {
         // TODO: Handle game disconnect
         await User.findByIdAndUpdate(
           req.session.user._id,
@@ -73,7 +73,6 @@ router.get('/logout', async (req, res, next) => {
             select: '-passwordHash'
           }
         )
-        delete req.session.game
       }
 
       delete req.session.user
