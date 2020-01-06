@@ -45,7 +45,7 @@ namespace Schema
             _id = (string) user["_id"];
             _username = (string) user["username"];
             _lastGame = (string) user["lastGame"];
-            _disconnected = DateTime.Parse((string) user["disconnected"]);
+            DateTime.TryParse((string) user["disconnected"], out _disconnected);
         }
     }
 }
