@@ -10,7 +10,7 @@ public class Leave : MonoBehaviour
         {
             if (error == null)
             {
-                SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+                SceneManager.LoadScene("Home", LoadSceneMode.Single);
             }
             else
             {

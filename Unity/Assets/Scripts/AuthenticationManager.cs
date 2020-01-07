@@ -11,7 +11,7 @@ public class AuthenticationManager : MonoBehaviour
     public static AuthenticationManager Instance { get => _instance; }
 
     private static AuthenticationManager _instance;
-    
+
     private void Awake()
     {
         if (_instance != null)
@@ -35,7 +35,7 @@ public class AuthenticationManager : MonoBehaviour
             if (error == null)
             {
                 user = User.GetUser(response["user"]);
-                SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+                SceneManager.LoadScene("Home", LoadSceneMode.Single);
             }
             else
             {
@@ -54,7 +54,7 @@ public class AuthenticationManager : MonoBehaviour
             if (error == null)
             {
                 user = User.GetUser(response["user"]);
-                SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+                SceneManager.LoadScene("Home", LoadSceneMode.Single);
             }
             else
             {
@@ -69,7 +69,7 @@ public class AuthenticationManager : MonoBehaviour
             }
         });
     }
-    
+
     public void RegisterFormSubmit(string username, string password, APIWrapper.APICallback callback = null)
     {
         APIWrapper.Instance.AuthRegister(username, password, (response, error) =>
@@ -77,7 +77,7 @@ public class AuthenticationManager : MonoBehaviour
             if (error == null)
             {
                 user = User.GetUser(response["user"]);
-                SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+                SceneManager.LoadScene("Home", LoadSceneMode.Single);
             }
             else
             {
