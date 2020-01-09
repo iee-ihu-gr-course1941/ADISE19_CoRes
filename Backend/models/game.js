@@ -28,6 +28,11 @@ const gameSchema = new Schema(
         type: Boolean,
         required: true
       },
+      joined: {
+        type: Date,
+        required: true,
+        default: Date.now()
+      },
       _id: false
     }],
     properties: [{
