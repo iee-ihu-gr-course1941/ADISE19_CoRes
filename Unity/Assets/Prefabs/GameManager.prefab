@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7119580658558204759}
   - component: {fileID: 2984362832303560255}
-  - component: {fileID: 2004354448}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -45,16 +44,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPlayerTurn: 0
---- !u!114 &2004354448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4739470574660544394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcdee33978e6e4b4ab216ecd237d5961, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraList: []
