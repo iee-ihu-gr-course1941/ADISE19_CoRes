@@ -7,6 +7,8 @@ using UnityEngine;
 public class CardLoader : MonoBehaviour
 {
     public List<PropertyCard> propertiesList;
+    public List<StationCard> stationsList;
+    public List<UtilityCard> utilitysList;
     
     private void Start()
     {
@@ -16,6 +18,8 @@ public class CardLoader : MonoBehaviour
             {
                 JArray propertyPricesArray = (JArray) response["properties"];
                 propertiesList = new List<PropertyCard>(propertyPricesArray.Count);
+                stationsList = new List<StationCard>(propertyPricesArray.Count);
+                utilitysList = new List<UtilityCard>(propertyPricesArray.Count);
                 foreach (var property in propertyPricesArray)
                 {
                     if ((int) property["type"] == 0)
@@ -50,6 +54,26 @@ public class CardLoader : MonoBehaviour
                             (int) property["mortgage"]
                             );
                         propertiesList.Add(card);
+                    }
+                    else if ((int) property["type"] == 1)
+                    {
+                        StationCard card = new StationCard(
+                            property["name"].ToString(),
+                            (int) property["location"],
+                            property["rents"].ToObject<int[]>(),
+                            (int) property["mortgage"]
+                        );
+                        stationsList.Add(card);
+                    }
+                    else
+                    {
+                        UtilityCard card = new UtilityCard(
+                            property["name"].ToString(),
+                            (int) property["location"],
+                            property["rents"].ToObject<int[]>(),
+                            (int) property["mortgage"]
+                        );
+                        utilitysList.Add(card);
                     }
                 }
             }
