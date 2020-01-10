@@ -36,6 +36,12 @@ public class LoadGames : MonoBehaviour
     {
         if (gameList.Count > 0) {
             HideNoGamesFoundText();
+            
+            foreach (Transform child in mainScrollContentView.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
             foreach (var game in gameList)
             {
                 GameObject playerTextPanel = Instantiate(contentDataPanel, mainScrollContentView.transform, true);
