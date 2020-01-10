@@ -28,7 +28,7 @@ public class CameraController : MonoBehaviour
     }
  
     void Update () {
-        if (Input.GetMouseButtonUp(0)){
+        if (Input.GetKey(KeyCode.C)){
             currentCamera ++;
             if (currentCamera < cameraList.Count){
                 cameraList[currentCamera - 1].gameObject.SetActive(false);
