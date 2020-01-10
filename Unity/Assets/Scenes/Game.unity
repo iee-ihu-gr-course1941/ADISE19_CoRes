@@ -722,12 +722,12 @@ PrefabInstance:
     - target: {fileID: 6517827258534198711, guid: 968de05a1800963418642bc32482c165,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000001659034
+      value: -0.000000016590649
       objectReference: {fileID: 0}
     - target: {fileID: 6517827258534198711, guid: 968de05a1800963418642bc32482c165,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000045617066
+      value: 0.0000000045617914
       objectReference: {fileID: 0}
     - target: {fileID: 6517827258534198711, guid: 968de05a1800963418642bc32482c165,
         type: 3}
@@ -1135,17 +1135,17 @@ PrefabInstance:
     - target: {fileID: 6517827258534198711, guid: 968de05a1800963418642bc32482c165,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.26512206
+      value: 0.2651221
       objectReference: {fileID: 0}
     - target: {fileID: 6517827258534198711, guid: 968de05a1800963418642bc32482c165,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000016590647
+      value: 0.000000016590649
       objectReference: {fileID: 0}
     - target: {fileID: 6517827258534198711, guid: 968de05a1800963418642bc32482c165,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000045617923
+      value: -0.00000000456179
       objectReference: {fileID: 0}
     - target: {fileID: 6517827258534198711, guid: 968de05a1800963418642bc32482c165,
         type: 3}
@@ -1678,8 +1678,8 @@ MonoBehaviour:
   m_WorldUpOverride: {fileID: 0}
   m_UpdateMethod: 2
   m_DefaultBlend:
-    m_Style: 6
-    m_Time: 2
+    m_Style: 1
+    m_Time: 1
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -1751,8 +1751,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 444272292}
-  m_LocalRotation: {x: 0.2651221, y: 0.000000016590649, z: -0.00000000456179, w: 0.96421486}
-  m_LocalPosition: {x: 0, y: 3.6994143, z: -6.2185483}
+  m_LocalRotation: {x: 0.26512206, y: -0.000000016590649, z: 0.0000000045617914, w: 0.96421486}
+  m_LocalPosition: {x: 2.94, y: 3.6994143, z: -9.118548}
   m_LocalScale: {x: 1, y: 3.861306, z: 3.8613057}
   m_Children: []
   m_Father: {fileID: 0}
