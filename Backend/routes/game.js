@@ -109,8 +109,6 @@ router.post('/join', [
     // Update session
     req.session.user = helpers.transformUser(user)
 
-    // TODO: Trigger game join event
-
     return res.json(game)
   } catch (err) {
     if (err instanceof GameError) {

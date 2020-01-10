@@ -1,13 +1,19 @@
-/* global fetch */
+/* global alert, fetch */
 
 import React from 'react'
 import ReactDOM from 'react-dom'
+import io from 'socket.io-client'
 
 import Game from './components/Game'
 import Lobby from './components/Lobby'
 import Login from './components/Login'
 
 window.onload = async () => {
+  const socket = io()
+  socket.on('playerJoined', data => {
+    alert('Joined ' + data.player.user)
+  })
+
   const root = document.getElementById('root')
   const logout = document.getElementById('logout')
 

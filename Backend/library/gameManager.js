@@ -2,18 +2,40 @@ const config = require('../config.json')
 
 const Game = require('../models/game')
 
-const { getGame } = require('./gameHolder')
+const GameHolder = require('./gameHolder')
 const GameError = require('./gameError')
 
 class GameManager {
-  constructor (user, gameHolder) {
+  constructor (user) {
     this._user = user
-    this._gameHolder = gameHolder // nullable
+    this._gameHolder = null
 
     this.create = this.create.bind(this)
     this.join = this.join.bind(this)
     this.leave = this.leave.bind(this)
     this.current = this.current.bind(this)
+  }
+
+  async init () {
+    // Try to load previous game
+    const lastGameId = this._user && this._user.lastGame
+    if (lastGameId) {
+      const game = await GameHolder.getGameHolder(lastGameId)
+
+      if (game) {
+        // Check game.players for current user
+        const players = game.getJSON().players
+        const found = players.find(p => {
+          const pUserId = p.user.toString()
+          const sUserId = this._user._id
+          return pUserId === sUserId
+        })
+
+        if (found) {
+          this._gameHolder = game
+        }
+      }
+    }
   }
 
   async create (seats) {
@@ -24,23 +46,24 @@ class GameManager {
     }
 
     // Initialize Game
+    const player = {
+      user: self._user._id,
+      balance: config.game.initialBalance,
+      position: 0,
+      duplicateRolls: 0,
+      jailed: false
+    }
     let game = new Game({
-      players: [{
-        user: self._user._id,
-        balance: config.game.initialBalance,
-        position: 0,
-        duplicateRolls: 0,
-        jailed: false
-      }],
+      players: [player],
       seats,
       status: 'waitingPlayers',
       properties: config.prices.properties
     })
     game = await game.save()
 
-    self._gameHolder = await getGame(game.id)
+    self._gameHolder = await GameHolder.getGameHolder(game.id)
 
-    // TODO: Trigger game join event
+    self._gameHolder.getPlayerEvents().onPlayerJoined(player)
 
     return self._gameHolder
   }
@@ -60,6 +83,10 @@ class GameManager {
       throw new GameError('Game not found')
     }
 
+    self._gameHolder = await GameHolder.getGameHolder(gameId)
+
+    let player
+
     // Check if user is in game.players
     const playerIndex = game.players.findIndex(p => p.user.toString() === self._user._id)
     if (playerIndex >= 0) { // Reconnect if user was left in that game
@@ -74,6 +101,8 @@ class GameManager {
           throw new GameError('You cannot reconnect to this game')
         }
       }
+
+      player = game.players[playerIndex]
     } else { // Try to join game
       // Check for empty seats
       if (game.players.length > game.seats) {
@@ -89,21 +118,20 @@ class GameManager {
       }
 
       // Add user to game.players
-      game.players.push({
+      player = {
         user: self._user._id,
         balance: config.game.initialBalance,
         position: 0,
         duplicateRolls: 0,
         jailed: false
-      })
+      }
+      game.players.push(player)
       await game.save()
     }
 
-    self._gameHolder = await getGame(game.id, { update: true })
+    self._gameHolder.getPlayerEvents().onPlayerJoined(player)
 
-    // TODO: Trigger game join event
-
-    return self._gameHolder
+    return self._gameHolder.update()
   }
 
   async leave () {
@@ -143,9 +171,9 @@ class GameManager {
       }
     )
 
-    // TODO: Trigger game leave event
+    self._gameHolder.getPlayerEvents().onPlayerLeft(self._user._id)
 
-    return getGame(game.id, { update: true })
+    return this._gameHolder.update()
   }
 
   current () {
