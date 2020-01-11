@@ -38,4 +38,10 @@ public class GameManager : MonoBehaviour
         _game = game;
         SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
+    
+    public void GoToLobby(Game game)
+    {
+        _game = game;
+        SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+    }
 }
