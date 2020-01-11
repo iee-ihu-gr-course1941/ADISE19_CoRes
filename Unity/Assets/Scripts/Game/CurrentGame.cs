@@ -6,6 +6,8 @@ public class CurrentGame : MonoBehaviour
 {
     public SocketIo socketIo;
     public GameObject bottomBar;
+    public GameObject playerPrefab;
+    public GameObject GoNode;
     
     // Start is called before the first frame update
     void Start()
@@ -13,17 +15,32 @@ public class CurrentGame : MonoBehaviour
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
         
+        var userId = AuthenticationManager.Instance.user.Id;
+
         UpdateBottomBar();
+        SetupPlayer(Player.GetPlayerById(userId));
     }
 
     private void SocketIoOnPlayerJoined(Player player)
     {
         UpdateBottomBar();
+        SetupPlayer(player);
     }
     
     private void SocketIoOnPlayerLeft(Player player)
     {
         UpdateBottomBar();
+    }
+
+    void SetupPlayer(Player player)
+    {
+        Vector3[] offsets = {
+            new Vector3(0.15f, 0, 0.15f),
+            new Vector3(-0.15f, 0, 0.15f), 
+            new Vector3(0.15f, 0, -0.15f),
+            new Vector3(-0.15f, 0, -0.15f)};
+        Vector3 playerPos = GoNode.transform.position + offsets[player.Index];
+        GameObject newPlayer = Instantiate(playerPrefab, playerPos, Quaternion.identity);
     }
     
     private void UpdateBottomBar()
