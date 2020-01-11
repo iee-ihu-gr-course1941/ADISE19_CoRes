@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isMoving;
 
+    public Vector3 offset;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
@@ -41,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
             routePosition++;
             routePosition %= currentRoute.childNodeList.Count;
             
-            Vector3 nextPos = currentRoute.childNodeList[routePosition].position;
+            Vector3 nextPos = currentRoute.childNodeList[routePosition].position + offset;
             while (Step(nextPos)) { yield return null; }
             yield return new WaitForSeconds(0.1f);
             steps--;

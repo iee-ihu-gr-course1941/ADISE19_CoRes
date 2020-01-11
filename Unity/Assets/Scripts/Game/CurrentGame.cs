@@ -41,6 +41,7 @@ public class CurrentGame : MonoBehaviour
             new Vector3(-0.15f, 0, -0.15f)};
         Vector3 playerPos = GoNode.transform.position + offsets[player.Index];
         GameObject newPlayer = Instantiate(playerPrefab, playerPos, Quaternion.identity);
+        newPlayer.GetComponent<PlayerMovement>().offset = offsets[player.Index];
     }
     
     private void UpdateBottomBar()
