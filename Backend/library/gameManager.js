@@ -130,6 +130,7 @@ class GameManager {
         index: [...Array(config.game.maxPlayers)].map((_, i) => i).find(i => !game.players.find(({ index }) => index === i))
       }
       game.players.push(player)
+      game.status = 'running'
       await game.save()
 
       if (game.players.length === game.seats) {
