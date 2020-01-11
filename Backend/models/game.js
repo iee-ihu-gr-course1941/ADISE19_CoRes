@@ -12,6 +12,10 @@ const gameSchema = new Schema(
         required: true,
         ref: 'User'
       },
+      name: {
+        type: String,
+        require: true
+      },
       balance: {
         type: Number,
         required: true

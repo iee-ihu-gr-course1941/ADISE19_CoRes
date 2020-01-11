@@ -51,6 +51,7 @@ class GameManager {
     // Initialize Game
     const player = {
       user: self._user._id,
+      name: self._user.username,
       balance: config.game.initialBalance,
       position: 0,
       duplicateRolls: 0,
@@ -123,6 +124,7 @@ class GameManager {
       // Add user to game.players
       player = {
         user: self._user._id,
+        name: self._user.username,
         balance: config.game.initialBalance,
         position: 0,
         duplicateRolls: 0,
