@@ -27,12 +27,13 @@ class SocketWatcher extends EventEmitter {
       await this._updatingSockets.acquire()
       try {
         if (data.operationType === 'insert') {
-          if (data.fullDocument.game._id.toString() === gameId) {
+          const id = data && data.fullDocument && data.fullDocument.game && data.fullDocument.game._id && data.fullDocument.game._id.toString()
+          if (id === gameId) {
             const id = data.fullDocument._id.toString()
             this._sockets.set(id, data.fullDocument)
           }
         } else if (data.operationType === 'delete') {
-          const id = data.documentKey._id.toString()
+          const id = data && data.documentKey && data.documentKey._id && data.documentKey._id.toString()
           if (this._sockets.has(id)) {
             this._sockets.delete(id)
           }
