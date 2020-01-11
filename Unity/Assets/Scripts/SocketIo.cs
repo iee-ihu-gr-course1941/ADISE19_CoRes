@@ -104,6 +104,11 @@ public class SocketIo : MonoBehaviour
         }));
     }
     
+    private void OnDestroy()
+    {
+        Close();
+    }
+    
     IEnumerator waiter()
     {
         yield return new WaitForSecondsRealtime(5);
