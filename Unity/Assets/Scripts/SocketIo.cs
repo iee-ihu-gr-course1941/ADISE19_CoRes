@@ -11,6 +11,7 @@ using UnityEngine.Networking;
 
 public delegate void OnPlayerJoined(Player player);
 public delegate void OnPlayerLeft(Player player);
+public delegate void OnGameStarted();
 
 public class SocketIo : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class SocketIo : MonoBehaviour
     private bool _closed;
     public event OnPlayerJoined PlayerJoined;
     public event OnPlayerLeft PlayerLeft;
+    public event OnGameStarted GameStarted;
 
     // Start is called before the first frame update
     void Start()
@@ -86,6 +88,12 @@ public class SocketIo : MonoBehaviour
                                     PlayerLeft?.Invoke(player);
                                 }
                             }
+                            break;
+                        }
+                        case "gameStarted":
+                        {
+                            GameManager.Instance.Game.SetRunning();
+                            GameStarted?.Invoke();
                             break;
                         }
                     }
