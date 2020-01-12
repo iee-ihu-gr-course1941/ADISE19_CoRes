@@ -2,6 +2,7 @@ const config = require('../config.json')
 
 const Game = require('../models/game')
 
+const SocketManager = require('../socket-io/socketManager')
 const SocketWatcher = require('../socket-io/socketWatcher')
 
 const GameHolder = require('./gameHolder')
@@ -68,6 +69,7 @@ class GameManager {
     self._gameHolder = await GameHolder.getGameHolder(game.id)
 
     self._gameHolder.getPlayerEvents().onPlayerJoined(player)
+    SocketManager.updateSocketsGameFromUser(self._user._id, game.id)
 
     return self._gameHolder.getJSON()
   }
@@ -132,15 +134,17 @@ class GameManager {
         index: [...Array(config.game.maxPlayers)].map((_, i) => i).find(i => !game.players.find(({ index }) => index === i))
       }
       game.players.push(player)
-      game.status = 'running'
-      await game.save()
 
-      if (game.players.length === game.seats) {
+      if (game.players.length >= game.seats) {
+        game.status = 'running'
         self._gameHolder.getGameEvents().onGameStarted()
       }
+      
+      await game.save()
     }
 
     self._gameHolder.getPlayerEvents().onPlayerJoined(player)
+    SocketManager.updateSocketsGameFromUser(self._user._id, game.id)
 
     await self._gameHolder.update()
 
@@ -184,6 +188,7 @@ class GameManager {
       }
     )
 
+    SocketManager.updateSocketsGameFromUser(self._user._id)
     self._gameHolder.getPlayerEvents().onPlayerLeft(self._user._id)
 
     await self._gameHolder.update()
@@ -196,7 +201,10 @@ class GameManager {
   }
 
   current () {
-    return this._gameHolder && this._gameHolder.getJSON()
+    if (this._gameHolder) {
+      SocketManager.updateSocketsGameFromUser(this._user._id, this._gameHolder._game._id)
+      return this._gameHolder.getJSON()
+    }
   }
 
   getGameHolder () {

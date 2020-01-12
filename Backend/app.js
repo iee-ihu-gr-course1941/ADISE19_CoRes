@@ -18,6 +18,8 @@ const gameMiddleware = require('./middleware/game')
 const authRouter = require('./routes/auth')
 const gameRouter = require('./routes/game')
 
+const GameManager = require('./library/gameManager')
+
 const SocketManager = require('./socket-io/socketManager')
 const SocketEmitter = require('./socket-io/socketEmitter')
 const PlayerEvents = require('./socket-io/playerEvents')
@@ -64,8 +66,16 @@ io.on('connection', async socket => {
     return user || {}
   }
 
+  let gameManager = new GameManager(getSessionUser())
+  await gameManager.init()
+  let gameId
+  if (gameManager.current()) {
+    gameId = gameManager.current()._id
+    delete gameManager
+  }
+
   await SocketManager.getSocket({
-    game: getSessionUser().lastGame,
+    game: gameId,
     user: getSessionUser()._id,
     sessionId: socket.handshake.sessionID,
     socketId: socket.id

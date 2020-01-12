@@ -67,7 +67,7 @@ export default function (props) {
         <input type='button' value='Create Game' onClick={handleCreate} />
       </div>
       <ul style={{ fontFamily: 'monospace' }}>
-        {games.map(g => (
+        {games.map(g => g.status === 'waitingPlayers' && (
           <li key={g._id}>
             id: {g._id}
             <br />

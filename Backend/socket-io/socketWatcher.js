@@ -26,7 +26,7 @@ class SocketWatcher extends EventEmitter {
     this._cursor.on('change', async data => {
       await this._updatingSockets.acquire()
       try {
-        if (data.operationType === 'insert') {
+        if (data.operationType === 'insert' || data.operationType === 'update') {
           const id = data && data.fullDocument && data.fullDocument.game && data.fullDocument.game._id && data.fullDocument.game._id.toString()
           if (id === gameId) {
             const id = data.fullDocument._id.toString()

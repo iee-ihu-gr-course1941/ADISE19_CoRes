@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt')
 const express = require('express')
 const { check, validationResult } = require('express-validator')
 
+const SocketManager = require('../socket-io/socketManager')
+
 const User = require('../models/user')
 const helpers = require('../library/helpers')
 
@@ -10,6 +12,9 @@ const router = express.Router()
 module.exports = router
 
 router.get('/session', (req, res) => {
+  SocketManager.updateSocketsUserFromSession(req.sessionID,
+    req.session.user && req.session.user._id)
+  
   if (req.session.user) {
     return res.json({
       user: req.session.user,
@@ -76,6 +81,7 @@ router.get('/logout', async (req, res, next) => {
       }
 
       delete req.session.user
+      SocketManager.updateSocketsUserFromSession(req.sessionID)
       return res.json({ message: 'Logged out successfully' })
     }
 
