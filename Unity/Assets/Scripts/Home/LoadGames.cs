@@ -15,10 +15,13 @@ public class LoadGames : MonoBehaviour
     public TextMeshProUGUI noGamesFoundText;
     public GameObject mainScrollContentView;
     public GameObject contentDataPanel;
+    public GameObject errorText;
     
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        ClearErrorText();
+        
         APIWrapper.Instance.GameCurrent((response, error) =>
         {
             if (error == null)
@@ -29,9 +32,13 @@ public class LoadGames : MonoBehaviour
                 {
                     GameManager.Instance.GoToLobby(gameToJoin);
                 }
-                else
+                else if (gameToJoin.Status == "running")
                 {
                     GameManager.Instance.GoToGame(gameToJoin);
+                }
+                else
+                {
+                    Debug.Log("Unknown status: " + gameToJoin.Status);
                 }
             }
             else
@@ -41,7 +48,7 @@ public class LoadGames : MonoBehaviour
         });
     }
 
-    void Initialize()
+    private void Initialize()
     {
         if (gameList.Count > 0) {
             HideNoGamesFoundText();
@@ -53,31 +60,39 @@ public class LoadGames : MonoBehaviour
 
             foreach (var game in gameList)
             {
-                GameObject playerTextPanel = Instantiate(contentDataPanel, mainScrollContentView.transform, true);
+                var playerTextPanel = Instantiate(contentDataPanel, mainScrollContentView.transform, true);
                 playerTextPanel.transform.localScale = new Vector3(1,1,1);
                 playerTextPanel.transform.localPosition = new Vector3(0,0,0);
                 playerTextPanel.transform.Find("WaitingText").GetComponent<TextMeshProUGUI>().text = "Waiting for players " + game.SeatsToString();
-                playerTextPanel.transform.Find("Join").GetComponent<Submit>().Click += (sender, args) =>
+                
+                if (game.Status == "waitingPlayers")
                 {
-                    APIWrapper.Instance.GameJoin(game.Id, (response, error) =>
+                    playerTextPanel.transform.Find("Join").GetComponent<Submit>().Click += (sender, args) =>
                     {
-                        if (error != null)
+                        APIWrapper.Instance.GameJoin(game.Id, (response, error) =>
                         {
-                            if (response["error"] != null)
+                            if (error != null)
                             {
-                                Debug.Log((string) response["error"]["message"]);
+                                if (response["error"] == null) return;
+
+                                var errorMessage = (string) response["error"]["message"];
+
+                                Debug.Log(errorMessage);
+                                errorText.transform.GetComponent<TextMeshProUGUI>().text = errorMessage;
                             }
-                        }
-                        else
-                        {
-                            var gameToJoin = Game.GetGame(response);
-                            
-                            var userId = AuthenticationManager.Instance.user.Id;
-                            gameToJoin.AddPlayer(Player.GetPlayerById(userId));
-                            GameManager.Instance.GoToLobby(gameToJoin);
-                        }
-                    });
-                };
+                            else
+                            {
+                                Game.ClearCache();
+                                var gameToJoin = Game.GetGame(response);
+                                GameManager.Instance.GoToLobby(gameToJoin);
+                            }
+                        });
+                    };
+                }
+                else
+                {
+                    playerTextPanel.transform.Find("Join").gameObject.SetActive(false);
+                }
             }
         }
         else
@@ -88,14 +103,16 @@ public class LoadGames : MonoBehaviour
     
     public void LoadGameList()
     {
+        ClearErrorText();
+        
         APIWrapper.Instance.GameList((response, error) =>
         {
             if (error == null)
             {
                 Game.ClearCache();
-                JArray games = (JArray) response;
+                var games = (JArray) response;
                 gameList = new List<Game>(games.Count);
-                foreach (JToken game in games)
+                foreach (var game in games)
                 {
                     gameList.Add(Game.GetGame(game));
                 }
@@ -108,12 +125,17 @@ public class LoadGames : MonoBehaviour
         });
     }
 
-    void ShowNoGamesFoundText()
+    private void ClearErrorText()
+    {
+        errorText.transform.GetComponent<TextMeshProUGUI>().text = "";
+    }
+
+    private void ShowNoGamesFoundText()
     {
         noGamesFoundText.gameObject.SetActive(true);
     }
     
-    void HideNoGamesFoundText()
+    private void HideNoGamesFoundText()
     {
         noGamesFoundText.gameObject.SetActive(false);
     }
