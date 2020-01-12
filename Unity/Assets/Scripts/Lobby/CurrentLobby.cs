@@ -9,7 +9,7 @@ public class CurrentLobby : MonoBehaviour
     public GameObject bottomBar;
     
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
@@ -26,6 +26,7 @@ public class CurrentLobby : MonoBehaviour
     
     private void SocketIoOnPlayerLeft(Player player)
     {
+        UpdateWaitingText();
         UpdateBottomBar();
     }
 
