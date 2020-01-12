@@ -9,6 +9,12 @@ public class CurrentGame : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject GoNode;
     
+    private Vector3[] offsets = {
+        new Vector3(0.15f, 0, 0.15f),
+        new Vector3(-0.15f, 0, 0.15f), 
+        new Vector3(0.15f, 0, -0.15f),
+        new Vector3(-0.15f, 0, -0.15f)};
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -18,13 +24,13 @@ public class CurrentGame : MonoBehaviour
         var userId = AuthenticationManager.Instance.user.Id;
 
         UpdateBottomBar();
-        SetupPlayer(Player.GetPlayerById(userId));
+        SetupPlayer();
     }
 
     private void SocketIoOnPlayerJoined(Player player)
     {
         UpdateBottomBar();
-        SetupPlayer(player);
+        AddPlayer(player);
     }
     
     private void SocketIoOnPlayerLeft(Player player)
@@ -32,13 +38,20 @@ public class CurrentGame : MonoBehaviour
         UpdateBottomBar();
     }
 
-    void SetupPlayer(Player player)
+    void SetupPlayer()
     {
-        Vector3[] offsets = {
-            new Vector3(0.15f, 0, 0.15f),
-            new Vector3(-0.15f, 0, 0.15f), 
-            new Vector3(0.15f, 0, -0.15f),
-            new Vector3(-0.15f, 0, -0.15f)};
+        var game = GameManager.Instance.Game;
+
+        foreach (var player in game.Players)
+        {
+            Vector3 playerPos = GoNode.transform.position + offsets[player.Index];
+            GameObject newPlayer = Instantiate(playerPrefab, playerPos, Quaternion.identity);
+            newPlayer.GetComponent<PlayerMovement>().offset = offsets[player.Index];
+        }
+    }
+
+    void AddPlayer(Player player)
+    {
         Vector3 playerPos = GoNode.transform.position + offsets[player.Index];
         GameObject newPlayer = Instantiate(playerPrefab, playerPos, Quaternion.identity);
         newPlayer.GetComponent<PlayerMovement>().offset = offsets[player.Index];
