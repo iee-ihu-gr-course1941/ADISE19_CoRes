@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class CardLoader : MonoBehaviour
 {
     public List<PropertyCard> propertiesList;
     public List<StationCard> stationsList;
-    public List<UtilityCard> utilitysList;
+    public List<UtilityCard> utilitiesList;
     
     private void Start()
     {
@@ -16,64 +17,43 @@ public class CardLoader : MonoBehaviour
         {
             if (error == null)
             {
-                JArray propertyPricesArray = (JArray) response["properties"];
+                var propertyPricesArray = (JArray) response["properties"];
                 propertiesList = new List<PropertyCard>(propertyPricesArray.Count);
                 stationsList = new List<StationCard>(propertyPricesArray.Count);
-                utilitysList = new List<UtilityCard>(propertyPricesArray.Count);
+                utilitiesList = new List<UtilityCard>(propertyPricesArray.Count);
                 foreach (var property in propertyPricesArray)
                 {
-                    if ((int) property["type"] == 0)
+                    var name = property["name"].ToString();
+                    var color = property["color"]?.ToString();
+                    var location = (int) property["location"];
+                    var rents = ((JArray) property["rents"]).Select(rent => (int) rent).ToArray();
+                    var mortgage = (int) property["mortgage"];
+
+                    var type = (int) property["type"];
+                    switch (type)
                     {
-                        JArray houseCosts = (JArray) response["houses"];
-                        int location = (int) property["location"];
-                        int houseCost;
-                        switch (location / 10)
+                        case 0:
                         {
-                            case 0:
-                                 houseCost = (int) houseCosts[0];
-                                break;
-                            case 1:
-                                 houseCost = (int) houseCosts[1];
-                                break;
-                            case 2:
-                                 houseCost = (int) houseCosts[2];
-                                break;
-                            case 3:
-                                 houseCost = (int) houseCosts[3];
-                                break;
-                            default:
-                                houseCost = 0;
-                                break;
+                            var houseCosts = (JArray) response["houses"];
+                        
+                            var houseCost = (int) houseCosts[location / 10];
+                            
+                            var card = new PropertyCard(name, color, location, rents, houseCost, mortgage);
+                            propertiesList.Add(card);
+                            break;
                         }
-                        PropertyCard card = new PropertyCard(
-                            property["name"].ToString(),
-                            property["color"].ToString(),
-                            location,
-                             property["rents"].ToObject<int[]>(),
-                            houseCost,
-                            (int) property["mortgage"]
-                            );
-                        propertiesList.Add(card);
-                    }
-                    else if ((int) property["type"] == 1)
-                    {
-                        StationCard card = new StationCard(
-                            property["name"].ToString(),
-                            (int) property["location"],
-                            property["rents"].ToObject<int[]>(),
-                            (int) property["mortgage"]
-                        );
-                        stationsList.Add(card);
-                    }
-                    else
-                    {
-                        UtilityCard card = new UtilityCard(
-                            property["name"].ToString(),
-                            (int) property["location"],
-                            property["rents"].ToObject<int[]>(),
-                            (int) property["mortgage"]
-                        );
-                        utilitysList.Add(card);
+                        case 1:
+                        {
+                            var card = new StationCard(name, location, rents, mortgage);
+                            stationsList.Add(card);
+                            break;
+                        }
+                        default:
+                        {
+                            var card = new UtilityCard(name, location, rents, mortgage);
+                            utilitiesList.Add(card);
+                            break;
+                        }
                     }
                 }
             }
