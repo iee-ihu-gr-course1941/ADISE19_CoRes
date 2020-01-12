@@ -59,6 +59,11 @@ namespace Schema
             _players.Add(player);
         }
 
+        public void SetRunning()
+        {
+            _status = "running";
+        }
+
         public static void ClearCache()
         {
             _games?.Clear();
