@@ -27,9 +27,8 @@ public class NewGameDialog : MonoBehaviour
         createBtn.onClick.AddListener(() =>
         {
             seatsTxt.Highlight = false;
-            
-            int seatsNumber;
-            if (int.TryParse(seatsTxt.Value, out seatsNumber) && seatsNumber > 0)
+
+            if (int.TryParse(seatsTxt.Value, out var seatsNumber) && seatsNumber > 0)
             {
                 APIWrapper.Instance.GameNew(seatsNumber, (response, error) =>
                 {
@@ -44,12 +43,11 @@ public class NewGameDialog : MonoBehaviour
                             JArray errors = (JArray) response["errors"];
                             foreach (JToken err in errors.Children())
                             {
-                                if ((string) err["msg"] == "Invalid value")
+                                if ((string) err["msg"] != "Invalid value") continue;
+                                
+                                if ((string) err["param"] == "seats")
                                 {
-                                    if ((string) err["param"] == "seats")
-                                    {
-                                        seatsTxt.Highlight = true;
-                                    }
+                                    seatsTxt.Highlight = true;
                                 }
                             }
                         }
@@ -57,7 +55,7 @@ public class NewGameDialog : MonoBehaviour
                     else
                     {
                         Game game = Game.GetGame(response);
-                        GameManager.Instance.GoToGame(game);
+                        GameManager.Instance.GoToLobby(game);
                     }
                 });
             }

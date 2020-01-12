@@ -15,6 +15,7 @@ public class LoadGames : MonoBehaviour
     public TextMeshProUGUI noGamesFoundText;
     public GameObject mainScrollContentView;
     public GameObject contentDataPanel;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -22,8 +23,16 @@ public class LoadGames : MonoBehaviour
         {
             if (error == null)
             {
-                Game gameToJoin = Game.GetGame(response);
-                GameManager.Instance.GoToGame(gameToJoin);
+                var gameToJoin = Game.GetGame(response);
+
+                if (gameToJoin.Status == "waitingPlayers")
+                {
+                    GameManager.Instance.GoToLobby(gameToJoin);
+                }
+                else
+                {
+                    GameManager.Instance.GoToGame(gameToJoin);
+                }
             }
             else
             {
@@ -62,9 +71,10 @@ public class LoadGames : MonoBehaviour
                         else
                         {
                             var gameToJoin = Game.GetGame(response);
+                            
                             var userId = AuthenticationManager.Instance.user.Id;
                             gameToJoin.AddPlayer(Player.GetPlayerById(userId));
-                            GameManager.Instance.GoToGame(gameToJoin);
+                            GameManager.Instance.GoToLobby(gameToJoin);
                         }
                     });
                 };
