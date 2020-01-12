@@ -61,7 +61,7 @@ router.post('/new', [
     return res.json(game)
   } catch (err) {
     if (err instanceof GameError) {
-      return res.status(400).json(err.toJSON())
+      return res.status(400).json({ error: err.toJSON() })
     }
 
     next(err)
@@ -112,7 +112,7 @@ router.post('/join', [
     return res.json(game)
   } catch (err) {
     if (err instanceof GameError) {
-      return res.status(400).json(err.toJSON())
+      return res.status(400).json({ error: err.toJSON() })
     }
 
     next(err)
@@ -128,7 +128,7 @@ router.get('/list', async (req, res, next) => {
     res.json(games)
   } catch (err) {
     if (err instanceof GameError) {
-      return res.status(400).json(err.toJSON())
+      return res.status(400).json({ error: err.toJSON() })
     }
 
     next(err)
@@ -180,7 +180,7 @@ router.get('/leave', async (req, res, next) => {
     return res.json({ message: 'Left game successfully' })
   } catch (err) {
     if (err instanceof GameError) {
-      return res.status(400).json(err.toJSON())
+      return res.status(400).json({ error: err.toJSON() })
     }
 
     next(err)
