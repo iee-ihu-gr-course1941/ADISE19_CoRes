@@ -752,6 +752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   socketIo: {fileID: 797107118}
+  gameManager: {fileID: 914536013830304443}
   waitingText: {fileID: 1532491838}
   bottomBar: {fileID: 1496028361}
 --- !u!4 &520591560
@@ -3181,3 +3182,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4534187688fa8764582fdd9c2f58aaf1, type: 3}
+--- !u!114 &914536013830304443 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2984362832303560255, guid: 4534187688fa8764582fdd9c2f58aaf1,
+    type: 3}
+  m_PrefabInstance: {fileID: 914536013830304442}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66aed219e7e5f6a409a0b3def8e753b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

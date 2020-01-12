@@ -1,6 +1,8 @@
-﻿using Schema;
+using System.Collections;
+using Schema;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CurrentLobby : MonoBehaviour
 {
@@ -13,9 +15,11 @@ public class CurrentLobby : MonoBehaviour
     {
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
+        socketIo.GameStarted += SocketIoOnGameStarted;
         
         UpdateWaitingText();
         UpdateBottomBar();
+        StartCoroutine(StartGame());
     }
 
     private void SocketIoOnPlayerJoined(Player player)
@@ -28,6 +32,11 @@ public class CurrentLobby : MonoBehaviour
     {
         UpdateWaitingText();
         UpdateBottomBar();
+    }
+    
+    private void SocketIoOnGameStarted()
+    {
+        StartCoroutine(StartGame());
     }
 
     private void UpdateWaitingText()
@@ -68,5 +77,24 @@ public class CurrentLobby : MonoBehaviour
             nameTextMeshPro.text = player.UserId;
             typeTextMeshPro.text = "Player";
         }
+    }
+
+    private IEnumerator StartGame()
+    {
+        var gameManager = GameManager.Instance;
+        var game = gameManager.Game;
+
+        if (game.Status != "running") yield break;
+        
+        var waitingTextTransform = waitingText.transform;
+        var waitingTextMeshPro = waitingTextTransform.GetComponent<TextMeshProUGUI>();
+            
+        for (var i = 3; i >= 0; i--)
+        {
+            waitingTextMeshPro.text = "Game starting in " + i;
+            yield return new WaitForSeconds(1);
+        }
+            
+        gameManager.GoToGame(game);
     }
 }
