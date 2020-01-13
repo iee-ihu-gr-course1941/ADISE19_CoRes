@@ -104,6 +104,11 @@ public class APIWrapper : MonoBehaviour
     {
         StartCoroutine(Upload("game/prices", null, callback));
     }
+    
+    public void PlayerRollDice(APICallback callback = null)
+    {
+        StartCoroutine(Upload("player/roll-dice", null, callback));
+    }
 
     private IEnumerator Upload(string path, WWWForm form = null, APICallback callback = null)
     {
