@@ -18,6 +18,7 @@ const gameMiddleware = require('./middleware/game')
 const authRouter = require('./routes/auth')
 const gameRouter = require('./routes/game')
 
+const GameError = require('./library/gameError')
 const GameManager = require('./library/gameManager')
 
 const SocketManager = require('./socket-io/socketManager')
@@ -71,7 +72,7 @@ io.on('connection', async socket => {
   let gameId
   if (gameManager.current()) {
     gameId = gameManager.current()._id
-    delete gameManager
+    gameManager = null
   }
 
   await SocketManager.getSocket({
@@ -109,8 +110,12 @@ app.use(proxy('/mock-client', {
 }))
 
 app.use(function (err, req, res, next) {
-  console.error(err.stack)
-  res.status(500).send({ error: { message: 'Internal Server Error' } })
+  if (err instanceof GameError) {
+    return res.status(400).json({ error: err.toJSON() })
+  } else {
+    console.error(err.stack)
+    res.status(500).send({ error: { message: 'Internal Server Error' } })
+  }
 })
 
 mongooseConnecting

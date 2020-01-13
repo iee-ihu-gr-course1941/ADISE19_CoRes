@@ -139,7 +139,7 @@ class GameManager {
         game.status = 'running'
         self._gameHolder.getGameEvents().onGameStarted()
       }
-      
+
       await game.save()
     }
 
