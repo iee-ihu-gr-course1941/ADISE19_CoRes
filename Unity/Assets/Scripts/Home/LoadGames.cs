@@ -63,10 +63,11 @@ public class LoadGames : MonoBehaviour
                 var playerTextPanel = Instantiate(contentDataPanel, mainScrollContentView.transform, true);
                 playerTextPanel.transform.localScale = new Vector3(1,1,1);
                 playerTextPanel.transform.localPosition = new Vector3(0,0,0);
-                playerTextPanel.transform.Find("WaitingText").GetComponent<TextMeshProUGUI>().text = "Waiting for players " + game.SeatsToString();
                 
                 if (game.Status == "waitingPlayers")
                 {
+                    playerTextPanel.transform.Find("WaitingText").GetComponent<TextMeshProUGUI>().text = "Waiting for players " + game.SeatsToString();                    
+                    
                     playerTextPanel.transform.Find("Join").GetComponent<Submit>().Click += (sender, args) =>
                     {
                         APIWrapper.Instance.GameJoin(game.Id, (response, error) =>
@@ -91,6 +92,7 @@ public class LoadGames : MonoBehaviour
                 }
                 else
                 {
+                    playerTextPanel.transform.Find("WaitingText").GetComponent<TextMeshProUGUI>().text = game.Players.Count + " players in-game";
                     playerTextPanel.transform.Find("Join").gameObject.SetActive(false);
                 }
             }
