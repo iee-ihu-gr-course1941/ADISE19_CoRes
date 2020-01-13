@@ -6,7 +6,7 @@ public class CurrentGame : MonoBehaviour
 {
     public SocketIo socketIo;
     public GameObject bottomBar;
-    public GameObject playerPrefab;
+    public GameObject[] playerPrefabs = new GameObject [4];
     public GameObject GoNode;
     
     private Vector3[] offsets = {
@@ -20,11 +20,11 @@ public class CurrentGame : MonoBehaviour
     {
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
-        
+
         var userId = AuthenticationManager.Instance.user.Id;
 
         UpdateBottomBar();
-        SetupPlayer();
+        SetupPlayers();
     }
 
     private void SocketIoOnPlayerJoined(Player player)
@@ -38,14 +38,14 @@ public class CurrentGame : MonoBehaviour
         UpdateBottomBar();
     }
 
-    void SetupPlayer()
+    void SetupPlayers()
     {
         var game = GameManager.Instance.Game;
 
         foreach (var player in game.Players)
         {
             Vector3 playerPos = GoNode.transform.position + offsets[player.Index];
-            GameObject newPlayer = Instantiate(playerPrefab, playerPos, Quaternion.identity);
+            GameObject newPlayer = Instantiate(playerPrefabs[player.Index], playerPos, Quaternion.identity);
             newPlayer.GetComponent<PlayerMovement>().offset = offsets[player.Index];
         }
     }
@@ -53,7 +53,7 @@ public class CurrentGame : MonoBehaviour
     void AddPlayer(Player player)
     {
         Vector3 playerPos = GoNode.transform.position + offsets[player.Index];
-        GameObject newPlayer = Instantiate(playerPrefab, playerPos, Quaternion.identity);
+        GameObject newPlayer = Instantiate(playerPrefabs[player.Index], playerPos, Quaternion.identity);
         newPlayer.GetComponent<PlayerMovement>().offset = offsets[player.Index];
     }
     
