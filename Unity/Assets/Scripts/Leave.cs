@@ -12,16 +12,11 @@ public class Leave : MonoBehaviour
         
         APIWrapper.Instance.GameLeave((response, error) =>
         {
-            if (error == null)
+            SceneManager.LoadScene("Home", LoadSceneMode.Single);
+
+            if (error != null && response["error"] == null)
             {
-                SceneManager.LoadScene("Home", LoadSceneMode.Single);
-            }
-            else
-            {
-                if (response["error"] == null)
-                {
-                    throw new Exception(error);
-                }
+                throw new Exception(error);
             }
         });
     }

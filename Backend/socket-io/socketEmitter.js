@@ -14,6 +14,7 @@ class SocketEmitter extends EventEmitter {
   }
 
   async emit (eventName, data) {
+    console.log(eventName, data)
     await this._socketWatcher.updatingSockets().acquire()
     super.emit(eventName, data)
     const sockets = this._socketWatcher.getSockets()
