@@ -138,7 +138,7 @@ class GameManager {
       if (game.players.length >= game.seats) {
         game.status = 'running'
         game.currentPlayer = game.players[0].user
-        self._gameHolder.getGameEvents().onGameStarted()
+        self._gameHolder.getGameEvents().onGameStarted(game.currentPlayer)
       }
 
       await game.save()

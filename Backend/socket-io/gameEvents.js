@@ -8,8 +8,8 @@ class GameEvents extends SocketEmitter {
     this.onGameEnded = this.onGameEnded.bind(this)
   }
 
-  onGameStarted () {
-    return this.emit('gameStarted', {})
+  onGameStarted (firstPlayer) {
+    return this.emit('gameStarted', { firstPlayer })
   }
 
   onGameEnded () {
