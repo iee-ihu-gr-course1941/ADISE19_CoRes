@@ -69,10 +69,10 @@ router.get('/roll-dice', async (req, res, next) => {
       Math.floor(Math.random() * 6)
     ]
 
+    const player = currentGame.players.find(p => p.user.toString() === req.session.user._id)
+
     const diceSum = dice[0] + dice[1]
     const newLocation = (player.position + diceSum) % 40
-
-    const player = currentGame.players.find(p => p.user.toString() === req.session.user._id)
 
     const gameHolder = res.locals.game.getGameHolder()
     gameHolder.getPlayerEvents().onPlayerRolledDice(player.user, dice)
