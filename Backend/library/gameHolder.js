@@ -1,3 +1,5 @@
+const { Types } = require('mongoose')
+
 const Game = require('../models/game')
 
 const GameEvents = require('../socket-io/gameEvents')
@@ -38,7 +40,11 @@ class GameHolder {
 }
 
 GameHolder.getGameHolder = async gameId => {
-  const game = await Game.findById(gameId)
+  const game = await Game.findOne({
+    _id: Types.ObjectId(gameId),
+    status: { $ne: 'ended' }
+  })
+
   if (game) {
     return new GameHolder(game)
   }

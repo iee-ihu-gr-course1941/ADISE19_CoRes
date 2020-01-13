@@ -191,6 +191,23 @@ class GameManager {
     SocketManager.updateSocketsGameFromUser(self._user._id)
     self._gameHolder.getPlayerEvents().onPlayerLeft(self._user._id)
 
+    if (game.players.length === 1 && game.status === 'running') {
+      game = await Game.findByIdAndUpdate(
+        game.id,
+        {
+          $set: {
+            status: 'ended'
+          }
+        },
+        {
+          new: true,
+          runValidators: true
+        }
+      )
+
+      self._gameHolder.getGameEvents().onGameEnded()
+    }
+
     await self._gameHolder.update()
 
     if (!game.players.length) {
