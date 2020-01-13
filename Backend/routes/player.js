@@ -21,8 +21,8 @@ const nextPlayerTurn = async gameHolder => {
     nextPlayer = players[0]
   }
 
-  const updatedGame = await Game.updateOne(
-    { _id: Types.ObjectId(game._id) },
+  const updatedGame = await Game.findByIdAndUpdate(
+    game._id,
     {
       $set: {
         currentPlayer: Types.ObjectId(nextPlayer.user)
@@ -60,7 +60,9 @@ router.get('/roll-dice', async (req, res, next) => {
       throw new GameError('Not your turn')
     }
 
-    if (req.session.rolled) {
+    const player = currentGame.players.find(p => p.user.toString() === req.session.user._id)
+
+    if (player.rolled) {
       throw new GameError('You have already rolled the dice')
     }
 
@@ -69,8 +71,6 @@ router.get('/roll-dice', async (req, res, next) => {
       Math.floor(Math.random() * 6) + 1
     ]
 
-    const player = currentGame.players.find(p => p.user.toString() === req.session.user._id)
-
     const diceSum = dice[0] + dice[1]
     const newLocation = (player.position + diceSum) % 40
 
@@ -78,14 +78,14 @@ router.get('/roll-dice', async (req, res, next) => {
     gameHolder.getPlayerEvents().onPlayerRolledDice(player.user, dice)
 
     const game = await Game.findById(currentGame._id)
-    game.players.find(p => p.user.toString() === req.session.user._id).position = newLocation
+    const gamePlayer = game.players.find(p => p.user.toString() === req.session.user._id)
+    gamePlayer.position = newLocation
+    gamePlayer.lastRoll = dice
+    gamePlayer.rolled = true
     await game.save()
     await gameHolder.update()
 
     gameHolder.getPlayerEvents().onPlayerMoved(player.user, newLocation)
-
-    req.session.dice = dice
-    req.session.rolled = true
 
     return res.json({ dice })
   } catch (err) {
@@ -93,7 +93,7 @@ router.get('/roll-dice', async (req, res, next) => {
   }
 })
 
-router.get('/end-turn', (req, res, next) => {
+router.get('/end-turn', async (req, res, next) => {
   try {
     const game = res.locals.game.current()
 
@@ -101,25 +101,34 @@ router.get('/end-turn', (req, res, next) => {
       throw new GameError('Not your turn')
     }
 
-    if (!req.session.dice) {
+    const player = game.players.find(p => p.user.toString() === req.session.user._id)
+
+    if (!player.rolled) {
       throw new GameError('You need to roll the dice')
     }
-
-    const player = game.players.find(p => p.user.toString() === req.session.user._id)
 
     const gameHolder = res.locals.game.getGameHolder()
 
     let nextPlayer
 
-    const dice = req.session.dice
-    if (dice[0] === dice[1]) {
+    if (player.lastRoll[0] === player.lastRoll[1]) {
       gameHolder.getPlayerEvents().onPlayerPlaysAgain(req.session.user._id)
       nextPlayer = player
     } else {
       nextPlayer = nextPlayerTurn(gameHolder)
     }
-    delete req.session.dice
-    delete req.session.rolled
+
+    await Game.findByIdAndUpdate(
+      game._id,
+      {
+        $set: {
+          rolled: false
+        }
+      },
+      {
+        runValidators: true
+      }
+    )
 
     return res.json({ nextPlayer })
   } catch (err) {
