@@ -17,6 +17,7 @@ const gameMiddleware = require('./middleware/game')
 
 const authRouter = require('./routes/auth')
 const gameRouter = require('./routes/game')
+const playerRouter = require('./routes/player')
 
 const GameError = require('./library/gameError')
 const GameManager = require('./library/gameManager')
@@ -99,6 +100,7 @@ app.use(gameMiddleware)
 
 app.use('/auth', authRouter)
 app.use('/game', gameRouter)
+app.use('/player', playerRouter)
 
 app.use(proxy('/mock-client', {
   target: 'http://localhost:3001',

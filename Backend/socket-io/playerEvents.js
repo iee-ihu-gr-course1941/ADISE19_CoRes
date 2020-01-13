@@ -20,6 +20,22 @@ class PlayerEvents extends SocketEmitter {
   onPlayerLeft (user) {
     return this.emit('playerLeft', { user })
   }
+
+  onPlayerRolledDice (user, dice) {
+    return this.emit('playerRolledDice', { user, dice })
+  }
+
+  onPlayerMoved (user, location) {
+    return this.emit('playerMoved', { user, location })
+  }
+
+  onPlayerTurnChanged (user) {
+    return this.emit('playerTurnChanged', { user })
+  }
+
+  onPlayerPlaysAgain (user) {
+    return this.emit('playerPlaysAgain', { user })
+  }
 }
 
 module.exports = PlayerEvents

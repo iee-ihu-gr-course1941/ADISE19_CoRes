@@ -17,6 +17,7 @@ class GameHolder {
     // TODO: Subscribe to change stream
 
     this.getJSON = this.getJSON.bind(this)
+    this.getGameEvents = this.getGameEvents.bind(this)
     this.getPlayerEvents = this.getPlayerEvents.bind(this)
     this.update = this.update.bind(this)
   }
