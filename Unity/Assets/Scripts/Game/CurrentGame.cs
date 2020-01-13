@@ -9,21 +9,22 @@ public class CurrentGame : MonoBehaviour
     public GameObject[] playerPrefabs = new GameObject [4];
     public GameObject GoNode;
     public CameraController CameraController;
-    
-    private Vector3[] offsets = {
+    public Dice diceContainer;
+
+    private readonly Vector3[] _offsets = {
         new Vector3(0.15f, 0, 0.15f),
         new Vector3(-0.15f, 0, 0.15f), 
         new Vector3(0.15f, 0, -0.15f),
-        new Vector3(-0.15f, 0, -0.15f)};
+        new Vector3(-0.15f, 0, -0.15f)
+    };
     
-    void Start()
+    private void Start()
     {
         CameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
         
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
-
-        var userId = AuthenticationManager.Instance.user.Id;
+        socketIo.PlayerRolledDice += SocketIoOnPlayerRolledDice;
 
         UpdateBottomBar();
         SetupPlayers();
@@ -40,8 +41,13 @@ public class CurrentGame : MonoBehaviour
     {
         UpdateBottomBar();
     }
+    
+    private void SocketIoOnPlayerRolledDice(Player player, int[] dice)
+    {
+        StartCoroutine(diceContainer.RollTheDice(dice));
+    }
 
-    void SetupPlayers()
+    private void SetupPlayers()
     {
         var game = GameManager.Instance.Game;
 
@@ -51,11 +57,11 @@ public class CurrentGame : MonoBehaviour
         }
     }
 
-    void AddPlayer(Player player)
+    private void AddPlayer(Player player)
     {
-        Vector3 playerPos = GoNode.transform.position + offsets[player.Index];
-        GameObject newPlayer = Instantiate(playerPrefabs[player.Index], playerPos, Quaternion.identity);
-        newPlayer.GetComponent<PlayerMovement>().offset = offsets[player.Index];
+        var playerPos = GoNode.transform.position + _offsets[player.Index];
+        var newPlayer = Instantiate(playerPrefabs[player.Index], playerPos, Quaternion.identity);
+        newPlayer.GetComponent<PlayerMovement>().offset = _offsets[player.Index];
     }
     
     private void UpdateBottomBar()
