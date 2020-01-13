@@ -1,4 +1,6 @@
-﻿using Schema;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Schema;
 using TMPro;
 using UnityEngine;
 
@@ -18,10 +20,12 @@ public class CurrentGame : MonoBehaviour
         new Vector3(-0.15f, 0, -0.15f)
     };
     
+    public List<GameObject> playerList;
+
     private void Start()
     {
         CameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
-        
+
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
         socketIo.PlayerRolledDice += SocketIoOnPlayerRolledDice;
@@ -29,6 +33,9 @@ public class CurrentGame : MonoBehaviour
 
         UpdateBottomBar();
         SetupPlayers();
+        playerList = GameObject.FindGameObjectsWithTag("Player").ToList();
+        playerList.Reverse();
+        
         CameraController.SetUpCameras();
     }
 
