@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using NativeWebSocket;
@@ -12,6 +13,7 @@ using UnityEngine.Networking;
 public delegate void OnPlayerJoined(Player player);
 public delegate void OnPlayerLeft(Player player);
 public delegate void OnGameStarted();
+public delegate void OnPlayerRolledDice(Player player, int[] dice);
 
 public class SocketIo : MonoBehaviour
 {
@@ -20,9 +22,10 @@ public class SocketIo : MonoBehaviour
     public event OnPlayerJoined PlayerJoined;
     public event OnPlayerLeft PlayerLeft;
     public event OnGameStarted GameStarted;
-
+    public event OnPlayerRolledDice PlayerRolledDice;
+    
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         StartCoroutine(Upload("socket.io/?EIO=3&transport=polling", null, async (response, error) =>
         {
@@ -47,7 +50,7 @@ public class SocketIo : MonoBehaviour
             _websocket.OnClose += (e) =>
             {
                 Debug.Log("Connection closed!");
-                if (!_closed) StartCoroutine(waiter());
+                if (!_closed) StartCoroutine(Waiter());
             };
 
             _websocket.OnMessage += (bytes) =>
@@ -56,7 +59,7 @@ public class SocketIo : MonoBehaviour
                 
                 try
                 {
-                    string message = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+                    var message = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
 
                     if (message == "3probe")
                     {
@@ -67,13 +70,15 @@ public class SocketIo : MonoBehaviour
                     if (message.Length <= 3 || message.Substring(0, 2) != "42") return;
                     
                     message = message.Substring(2);
-                    JArray array = JArray.Parse(message);
+                    var array = JArray.Parse(message);
+                    
+                    Debug.Log(array[0]);
                     
                     switch ((string) array[0])
                     {
                         case "playerJoined":
                         {
-                            Player player = Player.GetPlayer(array[1]["player"]);
+                            var player = Player.GetPlayer(array[1]["player"]);
                             GetCurrentGame().Players.Add(player);
                             PlayerJoined?.Invoke(player);
                             break;
@@ -82,11 +87,10 @@ public class SocketIo : MonoBehaviour
                         {
                             foreach (var player in GetCurrentGame().Players.ToArray())
                             {
-                                if (player.UserId == (string) array[1]["user"])
-                                {
-                                    GetCurrentGame().Players.Remove(player);
-                                    PlayerLeft?.Invoke(player);
-                                }
+                                if (player.UserId != (string) array[1]["user"]) continue;
+                                
+                                GetCurrentGame().Players.Remove(player);
+                                PlayerLeft?.Invoke(player);
                             }
                             break;
                         }
@@ -94,6 +98,16 @@ public class SocketIo : MonoBehaviour
                         {
                             GameManager.Instance.Game.SetRunning();
                             GameStarted?.Invoke();
+                            break;
+                        }
+                        case "playerRolledDice":
+                        {
+                            var player = Player.GetPlayerById(array[1]["user"].ToString());
+                            var dice = ((JArray) array[1]["dice"]).Select(d => (int) d).ToArray();
+                            
+                            Debug.Log(player.UserId);
+                            
+                            PlayerRolledDice?.Invoke(player, dice);
                             break;
                         }
                     }
@@ -117,13 +131,13 @@ public class SocketIo : MonoBehaviour
         Close();
     }
     
-    IEnumerator waiter()
+    private IEnumerator Waiter()
     {
         yield return new WaitForSecondsRealtime(5);
         Start();
     }
 
-    async void SendWebSocketMessage()
+    private async void SendWebSocketMessage()
     {
         if (_websocket.State == WebSocketState.Open)
         {
