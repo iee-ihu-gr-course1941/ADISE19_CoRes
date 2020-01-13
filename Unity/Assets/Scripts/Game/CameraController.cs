@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -8,7 +9,9 @@ public class CameraController : MonoBehaviour
     public List<GameObject> cameraList;
     public List<GameObject> playerList;
     private int currentCamera;
-    void Start () {
+    
+    public void SetUpCameras()
+    {
         playerList = GameObject.FindGameObjectsWithTag("Player").ToList();
         playerList.Reverse();
 
@@ -26,7 +29,7 @@ public class CameraController : MonoBehaviour
             cameraList[0].gameObject.SetActive (true);
         }
     }
- 
+
     void Update () {
         if (Input.GetKey(KeyCode.C)){
             currentCamera ++;

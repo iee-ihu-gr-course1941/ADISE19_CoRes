@@ -3922,6 +3922,7 @@ MonoBehaviour:
   - {fileID: 4672059372499359165, guid: c5d2edc5795e21846bf830a3022292c2, type: 3}
   - {fileID: 4672059372499359165, guid: 84ae077f121d3d446a2fd04f1afce397, type: 3}
   GoNode: {fileID: 6087595704745296695}
+  CameraController: {fileID: 359741444}
 --- !u!4 &1316988788
 Transform:
   m_ObjectHideFlags: 0

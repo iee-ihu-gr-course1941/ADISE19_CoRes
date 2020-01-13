@@ -8,6 +8,7 @@ public class CurrentGame : MonoBehaviour
     public GameObject bottomBar;
     public GameObject[] playerPrefabs = new GameObject [4];
     public GameObject GoNode;
+    public CameraController CameraController;
     
     private Vector3[] offsets = {
         new Vector3(0.15f, 0, 0.15f),
@@ -15,9 +16,10 @@ public class CurrentGame : MonoBehaviour
         new Vector3(0.15f, 0, -0.15f),
         new Vector3(-0.15f, 0, -0.15f)};
     
-    // Start is called before the first frame update
     void Start()
     {
+        CameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
+        
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
 
@@ -25,6 +27,7 @@ public class CurrentGame : MonoBehaviour
 
         UpdateBottomBar();
         SetupPlayers();
+        CameraController.SetUpCameras();
     }
 
     private void SocketIoOnPlayerJoined(Player player)
@@ -44,9 +47,7 @@ public class CurrentGame : MonoBehaviour
 
         foreach (var player in game.Players)
         {
-            Vector3 playerPos = GoNode.transform.position + offsets[player.Index];
-            GameObject newPlayer = Instantiate(playerPrefabs[player.Index], playerPos, Quaternion.identity);
-            newPlayer.GetComponent<PlayerMovement>().offset = offsets[player.Index];
+            AddPlayer(player);
         }
     }
 
