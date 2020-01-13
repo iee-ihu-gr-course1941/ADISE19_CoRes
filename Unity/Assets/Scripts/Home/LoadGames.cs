@@ -26,6 +26,7 @@ public class LoadGames : MonoBehaviour
         {
             if (error == null)
             {
+                Game.ClearCache();
                 var gameToJoin = Game.GetGame(response);
 
                 if (gameToJoin.Status == "waitingPlayers")
