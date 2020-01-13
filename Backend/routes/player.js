@@ -65,8 +65,8 @@ router.get('/roll-dice', async (req, res, next) => {
     }
 
     const dice = [
-      Math.floor(Math.random() * 6),
-      Math.floor(Math.random() * 6)
+      Math.floor(Math.random() * 6) + 1,
+      Math.floor(Math.random() * 6) + 1
     ]
 
     const player = currentGame.players.find(p => p.user.toString() === req.session.user._id)
