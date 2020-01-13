@@ -1,15 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cinemachine;
+using Schema;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
     public List<GameObject> cameraList;
     public List<GameObject> playerList;
-    private int currentCamera;
-    
+
     public void SetUpCameras()
     {
         playerList = GameObject.FindGameObjectsWithTag("Player").ToList();
@@ -20,9 +19,9 @@ public class CameraController : MonoBehaviour
             cameraList.Add(player.transform.Find("VirtualCamera").gameObject);
         }
         
-        currentCamera = 0;
-        for (int i = 0; i < cameraList.Count; i++){
-            cameraList[i].gameObject.SetActive(false);
+        foreach (var vCamera in cameraList)
+        {
+            vCamera.gameObject.SetActive(false);
         }
 
         if (cameraList.Count > 0){
@@ -30,7 +29,7 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    void Update () {
+    /*void Update () {
         if (Input.GetKey(KeyCode.C)){
             currentCamera ++;
             if (currentCamera < cameraList.Count){
@@ -42,6 +41,14 @@ public class CameraController : MonoBehaviour
                 currentCamera = 0;
                 cameraList[currentCamera].gameObject.SetActive(true);
             }
+        }
+    }*/
+
+    public void FocusCameraOn(Player player)
+    {
+        for (int i = 0; i < cameraList.Count; i++)
+        {
+            cameraList[i].gameObject.SetActive(i == player.Index);
         }
     }
 }

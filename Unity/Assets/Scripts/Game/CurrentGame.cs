@@ -25,6 +25,7 @@ public class CurrentGame : MonoBehaviour
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
         socketIo.PlayerRolledDice += SocketIoOnPlayerRolledDice;
+        socketIo.PlayerTurnChanged += SocketIoOnPlayerTurnChanged;
 
         UpdateBottomBar();
         SetupPlayers();
@@ -45,6 +46,11 @@ public class CurrentGame : MonoBehaviour
     private void SocketIoOnPlayerRolledDice(Player player, int[] dice)
     {
         StartCoroutine(diceContainer.RollTheDice(dice));
+    }
+
+    private void SocketIoOnPlayerTurnChanged(Player player)
+    {
+        CameraController.FocusCameraOn(player);
     }
 
     private void SetupPlayers()
