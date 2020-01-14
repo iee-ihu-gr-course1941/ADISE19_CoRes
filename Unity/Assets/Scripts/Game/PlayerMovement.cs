@@ -1,63 +1,52 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
+using Schema;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public Route currentRoute;
-    
     private int routePosition;
-    
-    public int steps;
+    private Player player;
     public float rotationTime = 1f;
-
-    private bool isMoving;
-
+    public Route currentRoute;
     public Vector3 offset;
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
-        {
-            int die1 = Random.Range(1, 7);
-            int die2 = Random.Range(1, 7);
-            steps = die1 + die2;
-            Debug.Log("Rolled: " + die1 + " + " + + die2 + " = " + steps);
-
-            StartCoroutine(Move());
-        }
+        var game = GameManager.Instance.Game;
+        player = game.Players[transform.GetSiblingIndex()];
     }
 
-    IEnumerator Move()
+    public IEnumerator Move(int location)
     {
-        if (isMoving)
-        {
-            yield break;
-        }
-        isMoving = true;
-
+        yield return new WaitForSecondsRealtime(3);
+        
+        var steps = location - player.Position;
+        if (steps < 0) steps += 40;
+        
         while (steps > 0)
         {
             routePosition++;
             routePosition %= currentRoute.childNodeList.Count;
             
-            Vector3 nextPos = currentRoute.childNodeList[routePosition].position + offset;
-            while (Step(nextPos)) { yield return null; }
+            var nextPos = currentRoute.childNodeList[routePosition].position + offset;
+            while (Step(nextPos)) yield return null; 
+            
             yield return new WaitForSeconds(0.1f);
+            
             steps--;
+            
             if (routePosition % 10 == 0)
             {
                 yield return StartCoroutine(RotateMe(Vector3.up * 90, rotationTime));
             }
         }
 
-        isMoving = false;
+        player.SetPosition(location);
     }
     
     IEnumerator RotateMe(Vector3 byAngles, float inTime) 
-    {    var fromAngle = transform.rotation;
+    {   
+        var fromAngle = transform.rotation;
         var toAngle = Quaternion.Euler(transform.eulerAngles + byAngles);
         for(var t = 0f; t <= 1; t += Time.deltaTime/inTime) {
             transform.rotation = Quaternion.Slerp(fromAngle, toAngle, t);

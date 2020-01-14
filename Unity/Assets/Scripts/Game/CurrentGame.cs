@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Schema;
@@ -6,10 +7,13 @@ using UnityEngine;
 
 public class CurrentGame : MonoBehaviour
 {
+    private bool diceRolled = false;
+    private int playerNextLocation = -1;
     public SocketIo socketIo;
     public GameObject bottomBar;
-    public GameObject[] playerPrefabs = new GameObject [4];
+    public GameObject[] playerPrefabs = new GameObject[4];
     public GameObject GoNode;
+    public GameObject players;
     public CameraController CameraController;
     public Dice diceContainer;
 
@@ -29,14 +33,36 @@ public class CurrentGame : MonoBehaviour
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
         socketIo.PlayerRolledDice += SocketIoOnPlayerRolledDice;
+        socketIo.PlayerMoved+= SocketIoOnPlayerMoved;
         socketIo.PlayerTurnChanged += SocketIoOnPlayerTurnChanged;
 
         UpdateBottomBar();
         SetupPlayers();
-        playerList = GameObject.FindGameObjectsWithTag("Player").ToList();
-        playerList.Reverse();
+        // playerList.Reverse();
+        
+        foreach (Transform child in players.transform)
+        {
+            if (child != players.transform)
+            {
+                playerList.Add(child.gameObject);
+            }
+        }
         
         CameraController.SetUpCameras();
+    }
+
+    private void Update()
+    {
+        if (diceRolled && playerNextLocation > -1)
+        {
+            var player = Player.GetPlayerById(GameManager.Instance.Game.CurrentPlayerId);
+            var playerObject = playerList[player.Index];
+            
+            StartCoroutine(playerObject.GetComponent<PlayerMovement>().Move(playerNextLocation));
+            
+            diceRolled = false;
+            playerNextLocation = -1;
+        }
     }
 
     private void SocketIoOnPlayerJoined(Player player)
@@ -52,7 +78,14 @@ public class CurrentGame : MonoBehaviour
     
     private void SocketIoOnPlayerRolledDice(Player player, int[] dice)
     {
+        diceRolled = true;
         StartCoroutine(diceContainer.RollTheDice(dice));
+    }
+    
+    private void SocketIoOnPlayerMoved(Player player, int location)
+    {
+        GameManager.Instance.Game.UpdateCurrentPlayer(player);
+        playerNextLocation = location;
     }
 
     private void SocketIoOnPlayerTurnChanged(Player player)
@@ -73,7 +106,7 @@ public class CurrentGame : MonoBehaviour
     private void AddPlayer(Player player)
     {
         var playerPos = GoNode.transform.position + _offsets[player.Index];
-        var newPlayer = Instantiate(playerPrefabs[player.Index], playerPos, Quaternion.identity);
+        var newPlayer = Instantiate(playerPrefabs[player.Index], playerPos, Quaternion.identity, players.transform);
         newPlayer.GetComponent<PlayerMovement>().offset = _offsets[player.Index];
     }
     
