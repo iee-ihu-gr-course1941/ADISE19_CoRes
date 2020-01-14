@@ -31,8 +31,7 @@ public class SocketIo : MonoBehaviour
     public event OnPlayerTurnChanged PlayerTurnChanged;
     public event OnPlayerSteppedOnChance PlayerSteppedOnChance;
     public event OnPlayerSteppedOnCommunityChest PlayerSteppedOnCommunityChest;
-
-    // Start is called before the first frame update
+    
     private void Start()
     {
         StartCoroutine(Upload("socket.io/?EIO=3&transport=polling", null, async (response, error) =>
@@ -58,7 +57,7 @@ public class SocketIo : MonoBehaviour
             _websocket.OnClose += (e) =>
             {
                 Debug.Log("Connection closed!");
-                if (!_closed) StartCoroutine(Waiter());
+                if (!_closed) Start();
             };
 
             _websocket.OnMessage += (bytes) =>
@@ -171,12 +170,6 @@ public class SocketIo : MonoBehaviour
     private void OnDestroy()
     {
         Close();
-    }
-    
-    private IEnumerator Waiter()
-    {
-        yield return new WaitForSecondsRealtime(5);
-        Start();
     }
 
     private async void SendWebSocketMessage()

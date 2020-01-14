@@ -31,12 +31,15 @@ module.exports = [
   {
     text: 'Δώσε εξεταστική. Μην περάσεις από την αφετηρία, μην πάρεις 200ΔΜ.',
     action: async (userId, gameHolder) => {
+      const targetLocation = 10
       const currentGame = gameHolder.getJSON()
 
       const game = await Game.findById(currentGame._id)
       const gamePlayer = game.players.find(p => p.user.toString() === userId.toString())
 
-      gamePlayer.position = 10
+      gameHolder.getPlayerEvents().onPlayerMoved(gamePlayer.user, targetLocation)
+
+      gamePlayer.position = targetLocation
       gamePlayer.jailed = true
       await game.save()
       await gameHolder.update()

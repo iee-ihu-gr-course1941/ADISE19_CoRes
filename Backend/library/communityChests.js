@@ -12,6 +12,8 @@ module.exports = [
       const game = await Game.findById(currentGame._id)
       const gamePlayer = game.players.find(p => p.user.toString() === userId.toString())
 
+      gameHolder.getPlayerEvents().onPlayerMoved(player.user, targetLocation)
+
       gamePlayer.balance += 200
 
       gameHolder.getPlayerEvents().onPlayerPassedFromGo(player.user)
