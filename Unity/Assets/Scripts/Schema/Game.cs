@@ -69,6 +69,11 @@ namespace Schema
             _games?.Clear();
         }
 
+        public void UpdateCurrentPlayer(Player player)
+        {
+            _currentPlayerId = player.UserId;
+        }
+
         public string SeatsToString() => $"{_players.Count}/{_seats}";
     }
 }
