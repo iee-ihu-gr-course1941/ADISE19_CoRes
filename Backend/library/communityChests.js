@@ -1,6 +1,8 @@
+const Game = require('../models/game')
+
 module.exports = [
   {
-    text: "Πήγαινε στην Αφετηρία.",
+    text: 'Πήγαινε στην Αφετηρία.',
     action: async (userId, gameHolder) => {
       const targetLocation = 0
 
@@ -21,7 +23,7 @@ module.exports = [
     }
   },
   {
-    text: "Έκανες την απαλλακτική εργασία σου. Πάρε 100ΔΜ.",
+    text: 'Έκανες την απαλλακτική εργασία σου. Πάρε 100ΔΜ.',
     action: async (userId, gameHolder) => {
       const currentGame = gameHolder.getJSON()
       const player = currentGame.players.find(p => p.user.toString() === userId.toString())
@@ -38,7 +40,7 @@ module.exports = [
     }
   },
   {
-    text: "Έμεινες στο εργαστηριακό μέρος μαθήματος. Χάνεις 50ΔΜ.",
+    text: 'Έμεινες στο εργαστηριακό μέρος μαθήματος. Χάνεις 50ΔΜ.',
     action: async (userId, gameHolder) => {
       const currentGame = gameHolder.getJSON()
       const player = currentGame.players.find(p => p.user.toString() === userId.toString())

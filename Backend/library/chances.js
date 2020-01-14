@@ -25,7 +25,7 @@ module.exports = [
     }
   },
   {
-    text: "Δώσε εξεταστική. Μην περάσεις από την αφετηρία, μην πάρεις 200ΔΜ.",
+    text: 'Δώσε εξεταστική. Μην περάσεις από την αφετηρία, μην πάρεις 200ΔΜ.',
     action: async (userId, gameHolder) => {
       const currentGame = gameHolder.getJSON()
 
@@ -39,14 +39,14 @@ module.exports = [
     }
   },
   {
-    text: "Τα σκονάκια που έδωσες στους φίλους σου ήταν λάθος. Δώσε 50ΔΜ σε κάθε παίκτη.",
+    text: 'Τα σκονάκια που έδωσες στους φίλους σου ήταν λάθος. Δώσε 50ΔΜ σε κάθε παίκτη.',
     action: async (userId, gameHolder) => {
       const currentGame = gameHolder.getJSON()
 
       const game = await Game.findById(currentGame._id)
       const gamePlayer = game.players.find(p => p.user.toString() === userId.toString())
       const players = game.players
-      let money = (players.length - 1) * 50
+      const money = (players.length - 1) * 50
       if (gamePlayer.balance > money) {
         players.forEach(p => {
           if (p.user.toString() !== userId.toString()) {
