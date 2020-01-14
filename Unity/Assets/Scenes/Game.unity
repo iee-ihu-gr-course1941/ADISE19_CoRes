@@ -602,7 +602,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8317521ce2224414ba8ecf9ce7e156aa, type: 2}
+  - {fileID: 2100000, guid: 53d789b0772761e42a79f2e8bdfc6ada, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4123,7 +4123,7 @@ MonoBehaviour:
   - {fileID: 4672059372499359165, guid: c5d2edc5795e21846bf830a3022292c2, type: 3}
   - {fileID: 4672059372499359165, guid: 84ae077f121d3d446a2fd04f1afce397, type: 3}
   GoNode: {fileID: 6087595704745296695}
-  players: {fileID: 434482709}
+  players: {fileID: 0}
   CameraController: {fileID: 359741445}
   diceContainer: {fileID: 1597719655}
   playerList: []
