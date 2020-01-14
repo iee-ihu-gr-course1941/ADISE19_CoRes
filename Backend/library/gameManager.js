@@ -109,6 +109,7 @@ class GameManager {
       }
 
       player = game.players[playerIndex]
+      self._gameHolder.getPlayerEvents().onPlayerJoined(player)
     } else { // Try to join game
       // Check for empty seats
       if (game.players.length > game.seats) {
@@ -138,13 +139,15 @@ class GameManager {
       if (game.players.length >= game.seats) {
         game.status = 'running'
         game.currentPlayer = game.players[0].user
+        self._gameHolder.getPlayerEvents().onPlayerJoined(player)
         self._gameHolder.getGameEvents().onGameStarted(game.currentPlayer)
+      } else {
+        self._gameHolder.getPlayerEvents().onPlayerJoined(player)
       }
 
       await game.save()
     }
 
-    self._gameHolder.getPlayerEvents().onPlayerJoined(player)
     SocketManager.updateSocketsGameFromUser(self._user._id, game.id)
 
     await self._gameHolder.update()
