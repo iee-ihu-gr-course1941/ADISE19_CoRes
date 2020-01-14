@@ -8,26 +8,9 @@ public class Route : MonoBehaviour
     private Transform[] childObjects;
     public List<Transform> childNodeList = new List<Transform>();
 
-    /*private void Start()
+    private void Start()
     {
         FillNodes();
-    }*/
-    
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-
-        FillNodes();
-
-        for (int i = 0; i < childNodeList.Count; i++)
-        {
-            Vector3 currentPos = childNodeList[i].position;
-            if (i > 0)
-            {
-                Vector3 prevPos = childNodeList[i - 1].position;
-                Gizmos.DrawLine(prevPos, currentPos);
-            }
-        }
     }
 
     private void FillNodes()
