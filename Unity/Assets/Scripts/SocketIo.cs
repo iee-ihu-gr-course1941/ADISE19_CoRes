@@ -100,6 +100,8 @@ public class SocketIo : MonoBehaviour
                         }
                         case "gameStarted":
                         {
+                            var firstPlayer = Player.GetPlayerById(array[1]["firstPlayer"].ToString());
+                            GameManager.Instance.Game.UpdateCurrentPlayer(firstPlayer);
                             GameManager.Instance.Game.SetRunning();
                             GameStarted?.Invoke();
                             break;
@@ -115,6 +117,7 @@ public class SocketIo : MonoBehaviour
                         case "playerTurnChanged":
                         {
                             var player = Player.GetPlayerById(array[1]["user"].ToString());
+                            GameManager.Instance.Game.UpdateCurrentPlayer(player);
 
                             Debug.Log(player.UserId);
                             
