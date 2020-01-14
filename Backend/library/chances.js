@@ -12,6 +12,8 @@ module.exports = [
       const game = await Game.findById(currentGame._id)
       const gamePlayer = game.players.find(p => p.user.toString() === userId.toString())
 
+      gameHolder.getPlayerEvents().onPlayerMoved(player.user, targetPropertyLocation)
+
       if (player.position > targetPropertyLocation) {
         gamePlayer.balance += 200
 
@@ -19,7 +21,9 @@ module.exports = [
         gameHolder.getPlayerEvents().onPlayerGotPaid(player.user, 200)
         gameHolder.getPlayerEvents().onPlayerBalanceChanged(player.user, gamePlayer.balance)
       }
+
       gamePlayer.position = targetPropertyLocation
+
       await game.save()
       await gameHolder.update()
     }

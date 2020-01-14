@@ -101,7 +101,7 @@ public class CurrentLobby : MonoBehaviour
         for (var i = 3; i >= 0; i--)
         {
             waitingTextMeshPro.text = "Game starting in " + i;
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSecondsRealtime(1f);
         }
             
         _gameManager.GoToGame(_game);

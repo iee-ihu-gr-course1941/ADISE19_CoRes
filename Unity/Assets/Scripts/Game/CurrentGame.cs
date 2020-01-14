@@ -13,7 +13,7 @@ public class CurrentGame : MonoBehaviour
     public Route route;
     public GameObject players;
     public GameObject nowPlayingPlayer;
-    public CameraController CameraController;
+    public CameraController cameraController;
     public Dice diceContainer;
     public GameObject chanceCard;
     public GameObject communityChestCard;
@@ -32,7 +32,7 @@ public class CurrentGame : MonoBehaviour
         _queue = new CoroutineQueue(this);
         _queue.StartLoop();
         
-        CameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
+        cameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
 
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
@@ -56,11 +56,7 @@ public class CurrentGame : MonoBehaviour
         var player = Player.GetPlayerById(GameManager.Instance.Game.CurrentPlayerId);
         UpdateBottomBarPlayerPlaying(player);
         
-        CameraController.SetUpCameras();
-    }
-
-    private void Update()
-    {
+        cameraController.SetUpCameras();
     }
 
     private void SocketIoOnPlayerJoined(Player player)
@@ -90,7 +86,7 @@ public class CurrentGame : MonoBehaviour
     private void SocketIoOnPlayerTurnChanged(Player player)
     {
         UpdateBottomBarPlayerPlaying(player);
-        CameraController.FocusCameraOn(player);
+        cameraController.FocusCameraOn(player);
     }
 
     private void SocketIoOnPlayerSteppedOnChance(Player player, string text)
@@ -190,7 +186,7 @@ public class CurrentGame : MonoBehaviour
     {
         chanceCard.SetActive(true);
         chanceCard.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = text;
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSecondsRealtime(5f);
         chanceCard.SetActive(false);
     }
     
@@ -198,7 +194,7 @@ public class CurrentGame : MonoBehaviour
     {
         communityChestCard.SetActive(true);
         communityChestCard.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = text;
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSecondsRealtime(5f);
         communityChestCard.SetActive(false);
     }
 }

@@ -39,6 +39,8 @@ class PlayerEvents extends SocketEmitter {
   }
 
   onPlayerMoved (user, location) {
+    const emitResult = this.emit('playerMoved', { user, location })
+
     // Check for chance
     const chances = [7, 22, 36]
     if (chances.includes(location)) {
@@ -51,7 +53,7 @@ class PlayerEvents extends SocketEmitter {
       this.onPlayerSteppedOnCommunityChest(user)
     }
 
-    return this.emit('playerMoved', { user, location })
+    return emitResult
   }
 
   onPlayerTurnChanged (user) {
@@ -82,8 +84,9 @@ class PlayerEvents extends SocketEmitter {
     if (chanceCards.length) {
       const chance = Math.floor(Math.random() * chanceCards.length)
       const card = chanceCards[chance]
+      const emitResult = this.emit('playerSteppedOnChance', { user, card: card.text })
       card.action(user, this._gameHolder)
-      return this.emit('playerSteppedOnChance', { user, card: card.text })
+      return emitResult
     }
   }
 
@@ -91,8 +94,9 @@ class PlayerEvents extends SocketEmitter {
     if (communityChestCards.length) {
       const communityChest = Math.floor(Math.random() * communityChestCards.length)
       const card = communityChestCards[communityChest]
+      const emitResult = this.emit('playerSteppedOnCommunityChest', { user, card: card.text })
       card.action(user, this._gameHolder)
-      return this.emit('playerSteppedOnCommunityChest', { user, card: card.text })
+      return emitResult
     }
   }
 }
