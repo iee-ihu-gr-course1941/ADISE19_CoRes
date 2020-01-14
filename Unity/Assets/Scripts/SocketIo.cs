@@ -14,6 +14,7 @@ public delegate void OnPlayerJoined(Player player);
 public delegate void OnPlayerLeft(Player player);
 public delegate void OnGameStarted();
 public delegate void OnPlayerRolledDice(Player player, int[] dice);
+public delegate void OnPlayerMoved(Player player, int location);
 public delegate void OnPlayerTurnChanged(Player player);
 
 public class SocketIo : MonoBehaviour
@@ -24,6 +25,7 @@ public class SocketIo : MonoBehaviour
     public event OnPlayerLeft PlayerLeft;
     public event OnGameStarted GameStarted;
     public event OnPlayerRolledDice PlayerRolledDice;
+    public event OnPlayerMoved PlayerMoved;
     public event OnPlayerTurnChanged PlayerTurnChanged;
 
     // Start is called before the first frame update
@@ -110,13 +112,21 @@ public class SocketIo : MonoBehaviour
                             PlayerRolledDice?.Invoke(player, dice);
                             break;
                         }
-                        case "PlayerTurnChanged":
+                        case "playerTurnChanged":
                         {
                             var player = Player.GetPlayerById(array[1]["user"].ToString());
 
                             Debug.Log(player.UserId);
                             
                             PlayerTurnChanged?.Invoke(player);
+                            break;
+                        }
+                        case "playerMoved":
+                        {
+                            var player = Player.GetPlayerById(array[1]["user"].ToString());
+                            var location = (int) array[1]["location"];
+
+                            PlayerMoved?.Invoke(player, location);
                             break;
                         }
                     }
