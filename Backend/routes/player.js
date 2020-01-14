@@ -79,6 +79,13 @@ router.get('/roll-dice', async (req, res, next) => {
 
     const game = await Game.findById(currentGame._id)
     const gamePlayer = game.players.find(p => p.user.toString() === req.session.user._id)
+    if (player.position + diceSum >= 40) {
+      gamePlayer.balance += 200
+
+      gameHolder.getPlayerEvents().onPlayerPassedFromGo(player.user)
+      gameHolder.getPlayerEvents().onPlayerGotPaid(player.user, 200)
+      gameHolder.getPlayerEvents().onPlayerBalanceChanged(player.user, gamePlayer.balance)
+    }
     gamePlayer.position = newLocation
     gamePlayer.lastRoll = dice
     gamePlayer.rolled = true
