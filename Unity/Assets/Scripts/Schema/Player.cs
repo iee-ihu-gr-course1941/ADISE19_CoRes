@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace Schema
@@ -42,6 +40,7 @@ namespace Schema
         private int _duplicateRolls;
         private bool _jailed;
         private int _index;
+        private string _name;
 
         public string UserId => _userId;
         public int Balance => _balance;
@@ -49,6 +48,7 @@ namespace Schema
         public int DuplicateRolls => _duplicateRolls;
         public bool Jailed => _jailed;
         public int Index => _index;
+        public string Name => _name;
 
         private Player(JToken player)
         {
@@ -58,6 +58,12 @@ namespace Schema
             _duplicateRolls = (int) player["duplicateRolls"];
             _jailed = (bool) player["jailed"];
             _index = (int) player["index"];
+            _name = (string) player["name"];
+        }
+
+        public void SetPosition(int position)
+        {
+            _position = position;
         }
     }
 }
