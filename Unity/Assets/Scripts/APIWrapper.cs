@@ -109,6 +109,11 @@ public class APIWrapper : MonoBehaviour
     {
         StartCoroutine(Upload("player/roll-dice", null, callback));
     }
+    
+    public void PlayerEndTurn(APICallback callback = null)
+    {
+        StartCoroutine(Upload("player/end-turn", null, callback));
+    }
 
     private IEnumerator Upload(string path, WWWForm form = null, APICallback callback = null)
     {
