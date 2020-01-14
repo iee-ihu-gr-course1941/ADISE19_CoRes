@@ -67,6 +67,7 @@ namespace Schema
         public static void ClearCache()
         {
             _games?.Clear();
+            Player.ClearCache();
         }
 
         public void UpdateCurrentPlayer(Player player)

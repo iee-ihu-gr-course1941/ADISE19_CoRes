@@ -65,5 +65,10 @@ namespace Schema
         {
             _position = position;
         }
+        
+        public static void ClearCache()
+        {
+            _players?.Clear();
+        }
     }
 }
