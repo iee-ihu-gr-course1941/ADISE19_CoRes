@@ -118,17 +118,10 @@ router.get('/end-turn', async (req, res, next) => {
       nextPlayer = nextPlayerTurn(gameHolder)
     }
 
-    await Game.findByIdAndUpdate(
-      game._id,
-      {
-        $set: {
-          rolled: false
-        }
-      },
-      {
-        runValidators: true
-      }
-    )
+    await Game.findById(game._id).then(g => {
+      g.players.find(p => p.user.toString() === player.user.toString()).rolled = false
+      return g.save()
+    })
 
     return res.json({ nextPlayer })
   } catch (err) {
