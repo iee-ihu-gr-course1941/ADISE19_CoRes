@@ -50,6 +50,7 @@ public class CurrentLobby : MonoBehaviour
     private void UpdateBottomBar()
     {
         var game = GameManager.Instance.Game;
+        var currentPlayerId = AuthenticationManager.Instance.user.Id;
         var bottomBarTransform = bottomBar.transform;
 
         if (game == null) return;
@@ -74,7 +75,15 @@ public class CurrentLobby : MonoBehaviour
             var nameTextMeshPro = nameTextTransform.GetComponent<TextMeshProUGUI>();
             var typeTextMeshPro = typeTextTransform.GetComponent<TextMeshProUGUI>();
 
-            nameTextMeshPro.text = player.Name;
+            if (player.UserId == currentPlayerId)
+            {
+                nameTextMeshPro.text = "•" + player.Name + "•";
+            }
+            else
+            {
+                nameTextMeshPro.text = player.Name;
+            }
+            
             typeTextMeshPro.text = "Player";
         }
     }

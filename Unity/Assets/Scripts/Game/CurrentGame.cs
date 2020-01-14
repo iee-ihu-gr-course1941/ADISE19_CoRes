@@ -113,6 +113,7 @@ public class CurrentGame : MonoBehaviour
     private void UpdateBottomBar()
     {
         var game = GameManager.Instance.Game;
+        var currentPlayerId = AuthenticationManager.Instance.user.Id;
         var bottomBarTransform = bottomBar.transform;
 
         if (game == null) return;
@@ -136,8 +137,17 @@ public class CurrentGame : MonoBehaviour
             var balanceTextTransform = bottomBarTransform.GetChild(index).GetChild(1);
             var nameTextMeshPro = nameTextTransform.GetComponent<TextMeshProUGUI>();
             var balanceTextMeshPro = balanceTextTransform.GetComponent<TextMeshProUGUI>();
+            
 
-            nameTextMeshPro.text = player.Name;
+            if (player.UserId == currentPlayerId)
+            {
+                nameTextMeshPro.text = "•" + player.Name + "•";
+            }
+            else
+            {
+                nameTextMeshPro.text = player.Name;
+            }
+            
             balanceTextMeshPro.text = player.Balance + "ΔΜ";
         }
     }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.05033976, g: 0.14940047, b: 0.19345555, a: 1}
+  m_IndirectSpecularColor: {r: 0.051594675, g: 0.15008068, b: 0.19371647, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: '[PH] Player 3'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f6136a9af29db240974ac53269cbf0b, type: 2}
   m_sharedMaterial: {fileID: 5416157036663507393, guid: 6f6136a9af29db240974ac53269cbf0b,
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 50
+  m_fontSize: 44.05
   m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -245,13 +245,13 @@ MonoBehaviour:
   m_margin: {x: 10, y: 0, z: 10, w: 0}
   m_textInfo:
     textComponent: {fileID: 41072731}
-    characterCount: 0
+    characterCount: 13
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 2
+    wordCount: 3
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -565,7 +565,7 @@ GameObject:
   - component: {fileID: 246674646}
   - component: {fileID: 246674645}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Board
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1205,7 +1205,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: '[PH] 1500'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f6136a9af29db240974ac53269cbf0b, type: 2}
   m_sharedMaterial: {fileID: 5416157036663507393, guid: 6f6136a9af29db240974ac53269cbf0b,
@@ -1234,7 +1234,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 45
+  m_fontSize: 44.05
   m_fontSizeBase: 150
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1275,13 +1275,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 336883182}
-    characterCount: 0
+    characterCount: 9
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -1345,7 +1345,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 359741444}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.1152077, y: -16.131924, z: 19.828983}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1717,13 +1717,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 444272292}
-  m_LocalRotation: {x: 0.2651221, y: -0.000000016590649, z: 0.000000004561791, w: 0.96421486}
-  m_LocalPosition: {x: 0, y: 3.6994143, z: -6.2185483}
-  m_LocalScale: {x: 1, y: 3.861306, z: 3.8613057}
+  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
+  m_LocalPosition: {x: 0, y: 3, z: -6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 36.567, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
 --- !u!1 &454009743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1779,7 +1779,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\u2022[PH] Player 1\u2022"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f6136a9af29db240974ac53269cbf0b, type: 2}
   m_sharedMaterial: {fileID: 5416157036663507393, guid: 6f6136a9af29db240974ac53269cbf0b,
@@ -1808,7 +1808,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 50
+  m_fontSize: 44.05
   m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1849,13 +1849,13 @@ MonoBehaviour:
   m_margin: {x: 10, y: 0, z: 10, w: 0}
   m_textInfo:
     textComponent: {fileID: 454009745}
-    characterCount: 0
+    characterCount: 15
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 2
+    wordCount: 3
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -1935,7 +1935,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: '[PH] 1500'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f6136a9af29db240974ac53269cbf0b, type: 2}
   m_sharedMaterial: {fileID: 5416157036663507393, guid: 6f6136a9af29db240974ac53269cbf0b,
@@ -1964,7 +1964,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 45
+  m_fontSize: 44.05
   m_fontSizeBase: 150
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2005,13 +2005,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 465892957}
-    characterCount: 0
+    characterCount: 9
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -3584,7 +3584,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1167884958}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 515.3624, y: 286.2856, z: -80.42315}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3829,7 +3829,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: '[PH] 1500'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f6136a9af29db240974ac53269cbf0b, type: 2}
   m_sharedMaterial: {fileID: 5416157036663507393, guid: 6f6136a9af29db240974ac53269cbf0b,
@@ -3858,7 +3858,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 45
+  m_fontSize: 44.05
   m_fontSizeBase: 150
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3899,13 +3899,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1220674870}
-    characterCount: 0
+    characterCount: 9
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -4135,7 +4135,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1316988786}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 515.3624, y: 286.2856, z: -80.42315}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -4679,7 +4679,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1466869433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.18907636, y: -5.759548, z: 4.4579544}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -4832,7 +4832,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: '[PH] 1500'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f6136a9af29db240974ac53269cbf0b, type: 2}
   m_sharedMaterial: {fileID: 5416157036663507393, guid: 6f6136a9af29db240974ac53269cbf0b,
@@ -4861,7 +4861,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 45
+  m_fontSize: 44.05
   m_fontSizeBase: 150
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4902,13 +4902,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1531090018}
-    characterCount: 0
+    characterCount: 9
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -5318,17 +5318,17 @@ PrefabInstance:
     - target: {fileID: 7119580658558204759, guid: 4534187688fa8764582fdd9c2f58aaf1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 225.13696
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7119580658558204759, guid: 4534187688fa8764582fdd9c2f58aaf1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.814453
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7119580658558204759, guid: 4534187688fa8764582fdd9c2f58aaf1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1312.8698
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7119580658558204759, guid: 4534187688fa8764582fdd9c2f58aaf1,
         type: 3}
@@ -5675,7 +5675,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: '[PH] Player 2'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f6136a9af29db240974ac53269cbf0b, type: 2}
   m_sharedMaterial: {fileID: 5416157036663507393, guid: 6f6136a9af29db240974ac53269cbf0b,
@@ -5704,7 +5704,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 50
+  m_fontSize: 44.05
   m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5745,13 +5745,13 @@ MonoBehaviour:
   m_margin: {x: 10, y: 0, z: 10, w: 0}
   m_textInfo:
     textComponent: {fileID: 1690559669}
-    characterCount: 0
+    characterCount: 13
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 2
+    wordCount: 3
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -6454,17 +6454,17 @@ PrefabInstance:
     - target: {fileID: 7783096805553109165, guid: 39b5805ca76b9654598ed0287aa28aaf,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 343.56143
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7783096805553109165, guid: 39b5805ca76b9654598ed0287aa28aaf,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 183.28084
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7783096805553109165, guid: 39b5805ca76b9654598ed0287aa28aaf,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -57.95962
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7783096805553109165, guid: 39b5805ca76b9654598ed0287aa28aaf,
         type: 3}
@@ -6655,7 +6655,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: '[PH] Player 4'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6f6136a9af29db240974ac53269cbf0b, type: 2}
   m_sharedMaterial: {fileID: 5416157036663507393, guid: 6f6136a9af29db240974ac53269cbf0b,
@@ -6684,7 +6684,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 50
+  m_fontSize: 44.05
   m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6725,13 +6725,13 @@ MonoBehaviour:
   m_margin: {x: 10, y: 0, z: 10, w: 0}
   m_textInfo:
     textComponent: {fileID: 2133492672}
-    characterCount: 0
+    characterCount: 13
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 2
+    wordCount: 3
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
