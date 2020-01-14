@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Schema;
 using UnityEngine;
 
@@ -17,8 +14,6 @@ public class CameraController : MonoBehaviour
 
     public void SetUpCameras()
     {
-        
-
         foreach (GameObject player in currentGame.playerList)
         {
             cameraList.Add(player.transform.Find("VirtualCamera").gameObject);

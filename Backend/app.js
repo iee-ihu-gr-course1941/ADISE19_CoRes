@@ -111,6 +111,8 @@ app.use(proxy('/mock-client', {
   }
 }))
 
+app.use(express.static('../Unity/Build'))
+
 app.use(function (err, req, res, next) {
   if (err instanceof GameError) {
     return res.status(400).json({ error: err.toJSON() })

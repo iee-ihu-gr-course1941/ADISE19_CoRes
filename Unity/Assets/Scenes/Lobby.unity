@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: a07fadb24ea940240afba3afc1a692cc, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &301808504
 RectTransform:
   m_ObjectHideFlags: 0
@@ -752,7 +752,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   socketIo: {fileID: 797107118}
-  gameManager: {fileID: 914536013830304443}
   waitingText: {fileID: 1532491838}
   bottomBar: {fileID: 1496028361}
 --- !u!4 &520591560
@@ -3182,15 +3181,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4534187688fa8764582fdd9c2f58aaf1, type: 3}
---- !u!114 &914536013830304443 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2984362832303560255, guid: 4534187688fa8764582fdd9c2f58aaf1,
-    type: 3}
-  m_PrefabInstance: {fileID: 914536013830304442}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66aed219e7e5f6a409a0b3def8e753b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
