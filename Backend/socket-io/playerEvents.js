@@ -1,13 +1,11 @@
 const SocketEmitter = require('./socketEmitter')
 
-const GameHolder = require('../library/gameHolder')
-
 const chanceCards = require('../library/chances')
 const communityChestCards = require('../library/communityChests')
 
 class PlayerEvents extends SocketEmitter {
-  constructor (gameId) {
-    super(gameId)
+  constructor (gameHolder) {
+    super(gameHolder)
 
     this.onPlayerJoined = this.onPlayerJoined.bind(this)
     this.onPlayerDisconnected = this.onPlayerDisconnected.bind(this)
@@ -84,7 +82,7 @@ class PlayerEvents extends SocketEmitter {
     if (chanceCards.length) {
       const chance = Math.floor(Math.random() * chanceCards.length)
       const card = chanceCards[chance]
-      await GameHolder.getGameHolder(this._gameId).then(card.action.bind(null, user))
+      card.action(user, this._gameHolder)
       return this.emit('playerSteppedOnChance', { user, card: card.text })
     }
   }
@@ -93,7 +91,7 @@ class PlayerEvents extends SocketEmitter {
     if (communityChestCards.length) {
       const communityChest = Math.floor(Math.random() * communityChestCards.length)
       const card = communityChestCards[communityChest]
-      await GameHolder.getGameHolder(this._gameId).then(card.action.bind(null, user))
+      card.action(user, this._gameHolder)
       return this.emit('playerSteppedOnCommunityChest', { user, card: card.text })
     }
   }

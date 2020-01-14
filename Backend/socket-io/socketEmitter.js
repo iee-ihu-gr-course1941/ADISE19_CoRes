@@ -5,9 +5,12 @@ const SocketWatcher = require('./socketWatcher')
 let _io = null
 
 class SocketEmitter extends EventEmitter {
-  constructor (gameId) {
+  constructor (gameHolder) {
     super()
 
+    const gameId = gameHolder.getJSON()._id.toString()
+
+    this._gameHolder = gameHolder
     this._gameId = gameId
     this.emit = this.emit.bind(this)
     this._socketWatcher = SocketWatcher.getSocketWatcher(gameId)

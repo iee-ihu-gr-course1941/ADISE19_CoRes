@@ -1,8 +1,8 @@
 const SocketEmitter = require('./socketEmitter')
 
 class GameEvents extends SocketEmitter {
-  constructor (gameId) {
-    super(gameId)
+  constructor (gameHolder) {
+    super(gameHolder)
 
     this.onGameStarted = this.onGameStarted.bind(this)
     this.onGameEnded = this.onGameEnded.bind(this)
