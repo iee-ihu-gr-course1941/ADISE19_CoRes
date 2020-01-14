@@ -74,7 +74,7 @@ public class CurrentLobby : MonoBehaviour
             var nameTextMeshPro = nameTextTransform.GetComponent<TextMeshProUGUI>();
             var typeTextMeshPro = typeTextTransform.GetComponent<TextMeshProUGUI>();
 
-            nameTextMeshPro.text = player.UserId;
+            nameTextMeshPro.text = player.Name;
             typeTextMeshPro.text = "Player";
         }
     }

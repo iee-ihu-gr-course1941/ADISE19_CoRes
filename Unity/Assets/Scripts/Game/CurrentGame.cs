@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Schema;
 using TMPro;
@@ -104,7 +104,7 @@ public class CurrentGame : MonoBehaviour
             var nameTextMeshPro = nameTextTransform.GetComponent<TextMeshProUGUI>();
             var balanceTextMeshPro = balanceTextTransform.GetComponent<TextMeshProUGUI>();
 
-            nameTextMeshPro.text = player.UserId;
+            nameTextMeshPro.text = player.Name;
             balanceTextMeshPro.text = player.Balance + "ΔΜ";
         }
     }
