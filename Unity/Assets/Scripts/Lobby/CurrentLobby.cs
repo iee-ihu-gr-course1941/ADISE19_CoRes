@@ -2,21 +2,24 @@ using System.Collections;
 using Schema;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CurrentLobby : MonoBehaviour
 {
+    private GameManager _gameManager;
+    private Game _game;
     public SocketIo socketIo;
     public GameObject waitingText;
     public GameObject bottomBar;
     
-    // Start is called before the first frame update
     private void Start()
     {
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
         socketIo.GameStarted += SocketIoOnGameStarted;
         
+        _gameManager = GameManager.Instance;
+        _game = _gameManager.Game;
+
         UpdateWaitingText();
         UpdateBottomBar();
         StartCoroutine(StartGame());
@@ -50,7 +53,7 @@ public class CurrentLobby : MonoBehaviour
     private void UpdateBottomBar()
     {
         var game = GameManager.Instance.Game;
-        var currentPlayerId = AuthenticationManager.Instance.user.Id;
+        var selfPlayerId = AuthenticationManager.Instance.user.Id;
         var bottomBarTransform = bottomBar.transform;
 
         if (game == null) return;
@@ -75,7 +78,7 @@ public class CurrentLobby : MonoBehaviour
             var nameTextMeshPro = nameTextTransform.GetComponent<TextMeshProUGUI>();
             var typeTextMeshPro = typeTextTransform.GetComponent<TextMeshProUGUI>();
 
-            if (player.UserId == currentPlayerId)
+            if (player.UserId == selfPlayerId)
             {
                 nameTextMeshPro.text = "•" + player.Name + "•";
             }
@@ -90,11 +93,8 @@ public class CurrentLobby : MonoBehaviour
 
     private IEnumerator StartGame()
     {
-        var gameManager = GameManager.Instance;
-        var game = gameManager.Game;
+        if (_game.Status != "running") yield break;
 
-        if (game.Status != "running") yield break;
-        
         var waitingTextTransform = waitingText.transform;
         var waitingTextMeshPro = waitingTextTransform.GetComponent<TextMeshProUGUI>();
             
@@ -104,6 +104,6 @@ public class CurrentLobby : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
             
-        gameManager.GoToGame(game);
+        _gameManager.GoToGame(_game);
     }
 }

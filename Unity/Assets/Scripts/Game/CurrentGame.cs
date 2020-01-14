@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Schema;
@@ -12,7 +12,7 @@ public class CurrentGame : MonoBehaviour
     public SocketIo socketIo;
     public GameObject bottomBar;
     public GameObject[] playerPrefabs = new GameObject[4];
-    public GameObject GoNode;
+    public Route route;
     public GameObject players;
     public GameObject nowPlayingPlayer;
     public CameraController CameraController;
@@ -88,7 +88,6 @@ public class CurrentGame : MonoBehaviour
     
     private void SocketIoOnPlayerMoved(Player player, int location)
     {
-        GameManager.Instance.Game.UpdateCurrentPlayer(player);
         playerNextLocation = location;
     }
 
@@ -110,8 +109,9 @@ public class CurrentGame : MonoBehaviour
 
     private void AddPlayer(Player player)
     {
-        var playerPos = GoNode.transform.position + _offsets[player.Index];
-        var newPlayer = Instantiate(playerPrefabs[player.Index], playerPos, Quaternion.identity, players.transform);
+        var playerPos = route.childNodeList[player.Position].transform.position + _offsets[player.Index];
+        var playerRotation = new Vector3(0, player.Position / 10 * 90, 0);
+        var newPlayer = Instantiate(playerPrefabs[player.Index], playerPos, Quaternion.Euler(playerRotation), players.transform);
         newPlayer.GetComponent<PlayerMovement>().offset = _offsets[player.Index];
     }
 
@@ -139,7 +139,7 @@ public class CurrentGame : MonoBehaviour
     private void UpdateBottomBar()
     {
         var game = GameManager.Instance.Game;
-        var currentPlayerId = AuthenticationManager.Instance.user.Id;
+        var selfPlayerId = AuthenticationManager.Instance.user.Id;
         var bottomBarTransform = bottomBar.transform;
 
         if (game == null) return;
@@ -165,7 +165,7 @@ public class CurrentGame : MonoBehaviour
             var balanceTextMeshPro = balanceTextTransform.GetComponent<TextMeshProUGUI>();
             
 
-            if (player.UserId == currentPlayerId)
+            if (player.UserId == selfPlayerId)
             {
                 nameTextMeshPro.text = "•" + player.Name + "•";
             }
