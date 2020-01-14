@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Schema;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CurrentGame : MonoBehaviour
 {
@@ -17,6 +19,8 @@ public class CurrentGame : MonoBehaviour
     public GameObject nowPlayingPlayer;
     public CameraController CameraController;
     public Dice diceContainer;
+    public GameObject chanceCard;
+    public GameObject communityChestCard;
 
     private readonly Vector3[] _offsets = {
         new Vector3(0.15f, 0, 0.15f),
@@ -36,6 +40,8 @@ public class CurrentGame : MonoBehaviour
         socketIo.PlayerRolledDice += SocketIoOnPlayerRolledDice;
         socketIo.PlayerMoved+= SocketIoOnPlayerMoved;
         socketIo.PlayerTurnChanged += SocketIoOnPlayerTurnChanged;
+        socketIo.PlayerSteppedOnChance += SocketIoOnPlayerSteppedOnChance;
+        socketIo.PlayerSteppedOnCommunityChest += SocketIoOnPlayerSteppedOnCommunityChest;
 
         UpdateBottomBar();
         SetupPlayers();
@@ -95,6 +101,16 @@ public class CurrentGame : MonoBehaviour
     {
         UpdateBottomBarPlayerPlaying(player);
         CameraController.FocusCameraOn(player);
+    }
+
+    private void SocketIoOnPlayerSteppedOnChance(Player player, string text)
+    {
+        StartCoroutine(DisplayChanceCard(text));
+    }
+    
+    private void SocketIoOnPlayerSteppedOnCommunityChest(Player player, string text)
+    {
+        StartCoroutine(DisplayCommunityChestCard(text));
     }
 
     private void SetupPlayers()
@@ -176,5 +192,21 @@ public class CurrentGame : MonoBehaviour
             
             balanceTextMeshPro.text = player.Balance + "ΔΜ";
         }
+    }
+
+    private IEnumerator DisplayChanceCard(string text)
+    {
+        chanceCard.SetActive(true);
+        chanceCard.transform.Find("Description").GetComponent<Text>().text = text;
+        yield return new WaitForSecondsRealtime(3f);
+        chanceCard.SetActive(false);
+    }
+    
+    private IEnumerator DisplayCommunityChestCard(string text)
+    {
+        communityChestCard.SetActive(true);
+        communityChestCard.transform.Find("Description").GetComponent<Text>().text = text;
+        yield return new WaitForSecondsRealtime(3f);
+        communityChestCard.SetActive(false);
     }
 }
