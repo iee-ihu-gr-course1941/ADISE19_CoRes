@@ -23,5 +23,44 @@ module.exports = [
       await game.save()
       await gameHolder.update()
     }
+  },
+  {
+    text: "Δώσε εξεταστική. Μην περάσεις από την αφετηρία, μην πάρεις 200ΔΜ.",
+    action: async (userId, gameHolder) => {
+      const currentGame = gameHolder.getJSON()
+
+      const game = await Game.findById(currentGame._id)
+      const gamePlayer = game.players.find(p => p.user.toString() === userId.toString())
+
+      gamePlayer.position = 10
+      gamePlayer.jailed = true
+      await game.save()
+      await gameHolder.update()
+    }
+  },
+  {
+    text: "Τα σκονάκια που έδωσες στους φίλους σου ήταν λάθος. Δώσε 50ΔΜ σε κάθε παίκτη.",
+    action: async (userId, gameHolder) => {
+      const currentGame = gameHolder.getJSON()
+
+      const game = await Game.findById(currentGame._id)
+      const gamePlayer = game.players.find(p => p.user.toString() === userId.toString())
+      const players = game.players
+      let money = (players.length - 1) * 50
+      if (gamePlayer.balance > money) {
+        players.forEach(p => {
+          if (p.user.toString() !== userId.toString()) {
+            p.balance += 50
+            gamePlayer.balance -= 50
+            gameHolder.getPlayerEvents().onPlayerGotPaid(p.user, 50)
+            gameHolder.getPlayerEvents().onPlayerBalanceChanged(p.user, p.balance)
+            gameHolder.getPlayerEvents().onPlayerPaid(userId, 50)
+            gameHolder.getPlayerEvents().onPlayerBalanceChanged(userId, gamePlayer.balance)
+          }
+        })
+      }
+      await game.save()
+      await gameHolder.update()
+    }
   }
 ]
