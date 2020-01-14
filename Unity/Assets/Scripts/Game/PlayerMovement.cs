@@ -18,8 +18,6 @@ public class PlayerMovement : MonoBehaviour
 
     public IEnumerator Move(int location)
     {
-        yield return new WaitForSecondsRealtime(2);
-        
         routePosition = player.Position;
         var steps = location - player.Position;
         if (steps < 0) steps += 40;

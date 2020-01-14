@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Schema;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CurrentGame : MonoBehaviour
 {
-    private bool diceRolled = false;
-    private int playerNextLocation = -1;
+    private CoroutineQueue _queue;
     public SocketIo socketIo;
     public GameObject bottomBar;
     public GameObject[] playerPrefabs = new GameObject[4];
@@ -33,6 +29,9 @@ public class CurrentGame : MonoBehaviour
 
     private void Start()
     {
+        _queue = new CoroutineQueue(this);
+        _queue.StartLoop();
+        
         CameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
 
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
@@ -45,8 +44,7 @@ public class CurrentGame : MonoBehaviour
 
         UpdateBottomBar();
         SetupPlayers();
-        // playerList.Reverse();
-        
+
         foreach (Transform child in players.transform)
         {
             if (child != players.transform)
@@ -63,16 +61,6 @@ public class CurrentGame : MonoBehaviour
 
     private void Update()
     {
-        if (diceRolled && playerNextLocation > -1)
-        {
-            var player = Player.GetPlayerById(GameManager.Instance.Game.CurrentPlayerId);
-            var playerObject = playerList[player.Index];
-            
-            StartCoroutine(playerObject.GetComponent<PlayerMovement>().Move(playerNextLocation));
-            
-            diceRolled = false;
-            playerNextLocation = -1;
-        }
     }
 
     private void SocketIoOnPlayerJoined(Player player)
@@ -88,13 +76,15 @@ public class CurrentGame : MonoBehaviour
     
     private void SocketIoOnPlayerRolledDice(Player player, int[] dice)
     {
-        diceRolled = true;
-        StartCoroutine(diceContainer.RollTheDice(dice));
+        _queue.EnqueueAction(diceContainer.RollTheDice(dice));
+        _queue.EnqueueWait(1f);
     }
     
     private void SocketIoOnPlayerMoved(Player player, int location)
     {
-        playerNextLocation = location;
+        var playerObject = playerList[player.Index];
+        _queue.EnqueueAction(playerObject.GetComponent<PlayerMovement>().Move(location));
+        _queue.EnqueueWait(1f);
     }
 
     private void SocketIoOnPlayerTurnChanged(Player player)
@@ -105,12 +95,14 @@ public class CurrentGame : MonoBehaviour
 
     private void SocketIoOnPlayerSteppedOnChance(Player player, string text)
     {
-        StartCoroutine(DisplayChanceCard(text));
+        _queue.EnqueueAction(DisplayChanceCard(text));
+        _queue.EnqueueWait(1f);
     }
     
     private void SocketIoOnPlayerSteppedOnCommunityChest(Player player, string text)
     {
-        StartCoroutine(DisplayCommunityChestCard(text));
+        _queue.EnqueueAction(DisplayCommunityChestCard(text));
+        _queue.EnqueueWait(1f);
     }
 
     private void SetupPlayers()
@@ -197,7 +189,7 @@ public class CurrentGame : MonoBehaviour
     private IEnumerator DisplayChanceCard(string text)
     {
         chanceCard.SetActive(true);
-        chanceCard.transform.Find("Description").GetComponent<Text>().text = text;
+        chanceCard.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = text;
         yield return new WaitForSecondsRealtime(3f);
         chanceCard.SetActive(false);
     }
@@ -205,7 +197,7 @@ public class CurrentGame : MonoBehaviour
     private IEnumerator DisplayCommunityChestCard(string text)
     {
         communityChestCard.SetActive(true);
-        communityChestCard.transform.Find("Description").GetComponent<Text>().text = text;
+        communityChestCard.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = text;
         yield return new WaitForSecondsRealtime(3f);
         communityChestCard.SetActive(false);
     }

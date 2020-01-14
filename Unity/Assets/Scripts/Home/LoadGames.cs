@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-
 using Schema;
 using TMPro;
 using Debug = UnityEngine.Debug;
@@ -17,7 +13,6 @@ public class LoadGames : MonoBehaviour
     public GameObject contentDataPanel;
     public GameObject errorText;
     
-    // Start is called before the first frame update
     private void Start()
     {
         ClearErrorText();
