@@ -38,9 +38,12 @@ const mongoUri = process.env.MONGODB_CLUSTER
   }`
   : 'mongodb://localhost/monopoliee'
 
-mongoose.set('debug', function (coll, method, query, doc) {
-  console.log('\x1B[33m' + new Date().toISOString() + '\x1B[0m', 'Query executed:', coll, method, query, doc)
-})
+if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
+  mongoose.set('debug', function (coll, method, query, doc) {
+    console.log('\x1B[33m' + new Date().toISOString() + '\x1B[0m', 'Query executed:', coll, method, query, doc)
+  })
+}
+
 mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
 mongoose.set('useFindAndModify', false)
@@ -104,16 +107,19 @@ app.use('/game', gameRouter)
 app.use('/player', playerRouter)
 app.use('/transaction', transactionRouter)
 
-app.use(proxy('/mock-client', {
-  target: 'http://localhost:3001',
-  changeOrigin: true,
-  ws: true,
-  pathRewrite: {
-    '^/mock-client': '/'
-  }
-}))
-
-app.use(express.static('../Unity/Build'))
+if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
+  app.use(proxy('/mock-client', {
+    target: 'http://localhost:3001',
+    changeOrigin: true,
+    ws: true,
+    pathRewrite: {
+      '^/mock-client': '/'
+    }
+  }))
+  app.use(express.static('../Unity/Build'))
+} else {
+  app.use(express.static('./unity-build'))
+}
 
 app.use(function (err, req, res, next) {
   if (err instanceof GameError) {
