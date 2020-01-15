@@ -68,6 +68,7 @@ namespace Schema
         {
             _games?.Clear();
             Player.ClearCache();
+            Property.ClearCache();
         }
 
         public void UpdateCurrentPlayer(Player player)

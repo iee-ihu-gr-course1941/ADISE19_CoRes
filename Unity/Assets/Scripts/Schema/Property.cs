@@ -27,6 +27,16 @@ namespace Schema
             return _properties[propertyId];;
         }
 
+        public static Property GetPropertyByLocation(int location)
+        {
+            foreach (var property in _properties)
+            {
+                if (property.Value._location == location)
+                    return property.Value;
+            }
+            return null;
+        }
+
         #endregion
 
         private string _id;
@@ -46,6 +56,11 @@ namespace Schema
             _ownerId = (string) property["owner"];
             _mortgaged = (bool) property["mortgaged"];
             _location = (int) property["location"];
+        }
+        
+        public static void ClearCache()
+        {
+            _properties?.Clear();
         }
     }
 }
