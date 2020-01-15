@@ -52,7 +52,7 @@ public class BuyProperty : MonoBehaviour
             }
             stCard.transform.Find("MortgageText").gameObject.GetComponent<TextMeshProUGUI>().text = stationCard.mortgage.ToString();
         }
-        if (location == 12)
+        else if (location == 12)
         {
             List<UtilityCard> utilityCards = _cardLoader.utilitiesList;
             UtilityCard utilityCard = utilityCards[0];
@@ -61,7 +61,7 @@ public class BuyProperty : MonoBehaviour
             uCard1.SetActive(true);
             uCard1.transform.Find("MortgageText").gameObject.GetComponent<TextMeshProUGUI>().text = utilityCard.mortgage.ToString();
         }
-        if (location == 28)
+        else if (location == 28)
         {
             List<UtilityCard> utilityCards = _cardLoader.utilitiesList;
             UtilityCard utilityCard = utilityCards[0];
