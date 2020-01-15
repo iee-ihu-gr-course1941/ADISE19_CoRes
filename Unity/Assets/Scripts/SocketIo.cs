@@ -19,6 +19,7 @@ public delegate void OnPlayerTurnChanged(Player player);
 public delegate void OnPlayerPlaysAgain(Player player);
 public delegate void OnPlayerSteppedOnChance(Player player, string text);
 public delegate void OnPlayerSteppedOnCommunityChest(Player player, string text);
+public delegate void OnPropertyOwnerChanged(int propertyIndex, int ownerId);
 
 public class SocketIo : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class SocketIo : MonoBehaviour
     public event OnPlayerPlaysAgain PlayerPlaysAgain;
     public event OnPlayerSteppedOnChance PlayerSteppedOnChance;
     public event OnPlayerSteppedOnCommunityChest PlayerSteppedOnCommunityChest;
+    public event OnPropertyOwnerChanged PropertyOwnerChanged;
     
     private void Start()
     {
@@ -158,6 +160,14 @@ public class SocketIo : MonoBehaviour
                             var text = array[1]["card"].ToString();
 
                             PlayerSteppedOnCommunityChest?.Invoke(player, text);
+                            break;
+                        }
+                        case "propertyOwnerChanged":
+                        {
+                            var propertyIndex = (int) array[1]["propertyIndex"];
+                            var ownerId = (int) array[1]["ownerId"];
+
+                            PropertyOwnerChanged?.Invoke(propertyIndex, ownerId);
                             break;
                         }
                     }
