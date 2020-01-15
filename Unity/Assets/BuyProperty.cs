@@ -103,6 +103,7 @@ public class BuyProperty : MonoBehaviour
                     card.transform.Find("BookCostText").gameObject.GetComponent<TextMeshProUGUI>().text = propertyCard.houseCost.ToString();
                     card.transform.Find("DegreeCostText").gameObject.GetComponent<TextMeshProUGUI>().text =
                         propertyCard.houseCost.ToString();
+                    card.transform.Find("MortgageText").gameObject.GetComponent<TextMeshProUGUI>().text = propertyCard.mortgage.ToString();
                 }
             }
         }
