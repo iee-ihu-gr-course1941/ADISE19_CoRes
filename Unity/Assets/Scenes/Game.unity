@@ -1025,6 +1025,36 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1358825943}
     m_Modifications:
+    - target: {fileID: 504553405028853962, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Rent2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1309624476005761805, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Rent1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3420764108730590042, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Rent0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3554437232042753774, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Rent1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3554437232367814353, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Rent3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3554437232371281012, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Rent2
+      objectReference: {fileID: 0}
     - target: {fileID: 3554437232659315394, guid: bf0ac6176c8112a418a10179ccfd5c4f,
         type: 3}
       propertyPath: m_IsActive
@@ -1045,10 +1075,20 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3554437233717462447, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Rent0
+      objectReference: {fileID: 0}
     - target: {fileID: 3923135817164488485, guid: bf0ac6176c8112a418a10179ccfd5c4f,
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3997217472107447434, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Rent5
       objectReference: {fileID: 0}
     - target: {fileID: 4190259350554398705, guid: bf0ac6176c8112a418a10179ccfd5c4f,
         type: 3}
@@ -1170,11 +1210,26 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5391992496106765220, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Rent4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598321282769834504, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: m_Name
+      value: Rent3
+      objectReference: {fileID: 0}
     - target: {fileID: 8235600437339045798, guid: bf0ac6176c8112a418a10179ccfd5c4f,
         type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9184592038208346507, guid: bf0ac6176c8112a418a10179ccfd5c4f,
+        type: 3}
+      propertyPath: CardLoader
+      value: 
+      objectReference: {fileID: 863624027}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf0ac6176c8112a418a10179ccfd5c4f, type: 3}
 --- !u!4 &138708331 stripped
