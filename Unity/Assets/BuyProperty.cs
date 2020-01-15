@@ -28,8 +28,12 @@ public class BuyProperty : MonoBehaviour
 
     public IEnumerator DisplayCard(int location)
     {
-        _abandon.SetActive(true);
-        _buy.SetActive(true);
+        if (GameManager.Instance.Game.CurrentPlayerId == AuthenticationManager.Instance.user.Id)
+        {
+            _buy.SetActive(true);
+            _abandon.SetActive(true);
+        }
+            
         if (location == 5 || location == 15 || location == 25 || location == 35)
         {
             List<StationCard> stationCards = _cardLoader.stationsList;
