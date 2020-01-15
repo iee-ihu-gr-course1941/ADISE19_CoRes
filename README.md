@@ -32,14 +32,14 @@ You may be asked to login to your GitHub account. This is because the project is
 
 ## Preparing the API (Backend)
 
-- Navigate to `ADISE19_CoRes/Backend` and run
+1. Navigate to `ADISE19_CoRes/Backend` and run
 ```bash
 npm install
 ```
 
 If you get any `node-pre-gyp ERR!` errors during `npm install`, make sure you have all [bcrypt dependencies](https://github.com/kelektiv/node.bcrypt.js#dependencies) installed and run `npm install` again. **Windows users can also download our [prebuilt bcrypt package](https://cdn.discordapp.com/attachments/650336477674340352/650481763457695754/bcrypt.zip) and extract it inside `Backend/node_modules`.** After installing it, run `npm install` to make sure everything is fine.
 
-- Configure a Replica Set in MongoDB. Find out more about this [here](https://docs.mongodb.com/manual/tutorial/deploy-replica-set/).
+2. Configure a Replica Set in MongoDB. Find out more about this [here](https://docs.mongodb.com/manual/tutorial/deploy-replica-set/).
 
 ## Preparing the UI (Unity)
 
@@ -51,7 +51,7 @@ If you get any `node-pre-gyp ERR!` errors during `npm install`, make sure you ha
 
 4. If `Development Build` is checked, uncheck it.
 
-5. Click `Build`. (Depending on your setup, building may take ages to complete).
+5. Click `Build`. (Depending on your setup, building may take ages to complete)
 
 # API Documentation
 
@@ -86,7 +86,7 @@ If you get any `node-pre-gyp ERR!` errors during `npm install`, make sure you ha
 |----------|--------|------------|---------|-------------|
 | `/transaction/buy-current-property` | GET | none | Property Object | Buys the property that the player is standing on |
 
-# Events
+# Socket.io Events
 
 ## Game Events
 - gameStarted
