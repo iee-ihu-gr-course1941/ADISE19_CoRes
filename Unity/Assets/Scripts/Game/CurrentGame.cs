@@ -9,6 +9,7 @@ public class CurrentGame : MonoBehaviour
     private CoroutineQueue _queue;
     public SocketIo socketIo;
     public GameObject bottomBar;
+    public TextMeshProUGUI statusMessage;
     public GameObject[] playerPrefabs = new GameObject[4];
     public Route route;
     public GameObject players;
@@ -32,6 +33,8 @@ public class CurrentGame : MonoBehaviour
         _queue = new CoroutineQueue(this);
         _queue.StartLoop();
         
+        _queue.EnqueueAction(ShowStatusMessage("Press space to roll the dice"));
+        
         cameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
 
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
@@ -39,6 +42,7 @@ public class CurrentGame : MonoBehaviour
         socketIo.PlayerRolledDice += SocketIoOnPlayerRolledDice;
         socketIo.PlayerMoved+= SocketIoOnPlayerMoved;
         socketIo.PlayerTurnChanged += SocketIoOnPlayerTurnChanged;
+        socketIo.PlayerPlaysAgain += SocketIoOnPlayerPlaysAgain;
         socketIo.PlayerSteppedOnChance += SocketIoOnPlayerSteppedOnChance;
         socketIo.PlayerSteppedOnCommunityChest += SocketIoOnPlayerSteppedOnCommunityChest;
 
@@ -82,11 +86,18 @@ public class CurrentGame : MonoBehaviour
         _queue.EnqueueAction(playerObject.GetComponent<PlayerMovement>().Move(location));
         _queue.EnqueueWait(1f);
     }
-
+    
     private void SocketIoOnPlayerTurnChanged(Player player)
     {
+        _queue.EnqueueAction(ShowStatusMessage("It's " + player.Name + "'s turn"));
+
         UpdateBottomBarPlayerPlaying(player);
         cameraController.FocusCameraOn(player);
+    }
+
+    private void SocketIoOnPlayerPlaysAgain(Player player)
+    {
+        _queue.EnqueueAction(ShowStatusMessage(player.Name + " plays again"));
     }
 
     private void SocketIoOnPlayerSteppedOnChance(Player player, string text)
@@ -180,6 +191,17 @@ public class CurrentGame : MonoBehaviour
             
             balanceTextMeshPro.text = player.Balance + "ΔΜ";
         }
+    }
+    
+    private IEnumerator ShowStatusMessage(string text)
+    {
+        statusMessage.text = text;
+
+        yield return new WaitForSecondsRealtime(2f);
+        
+        statusMessage.text = "";
+        
+        chanceCard.SetActive(false);
     }
 
     private IEnumerator DisplayChanceCard(string text)

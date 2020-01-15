@@ -16,6 +16,7 @@ public delegate void OnGameStarted();
 public delegate void OnPlayerRolledDice(Player player, int[] dice);
 public delegate void OnPlayerMoved(Player player, int location);
 public delegate void OnPlayerTurnChanged(Player player);
+public delegate void OnPlayerPlaysAgain(Player player);
 public delegate void OnPlayerSteppedOnChance(Player player, string text);
 public delegate void OnPlayerSteppedOnCommunityChest(Player player, string text);
 
@@ -29,6 +30,7 @@ public class SocketIo : MonoBehaviour
     public event OnPlayerRolledDice PlayerRolledDice;
     public event OnPlayerMoved PlayerMoved;
     public event OnPlayerTurnChanged PlayerTurnChanged;
+    public event OnPlayerPlaysAgain PlayerPlaysAgain;
     public event OnPlayerSteppedOnChance PlayerSteppedOnChance;
     public event OnPlayerSteppedOnCommunityChest PlayerSteppedOnCommunityChest;
     
@@ -125,6 +127,13 @@ public class SocketIo : MonoBehaviour
                             Debug.Log(player.UserId);
                             
                             PlayerTurnChanged?.Invoke(player);
+                            break;
+                        }
+                        case "playerPlaysAgain":
+                        {
+                            var player = Player.GetPlayerById(array[1]["user"].ToString());
+
+                            PlayerPlaysAgain?.Invoke(player);
                             break;
                         }
                         case "playerMoved":
