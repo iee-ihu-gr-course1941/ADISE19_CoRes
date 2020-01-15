@@ -27,6 +27,7 @@ class PlayerEvents extends SocketEmitter {
     this.onPlayerSteppedOnChance = this.onPlayerSteppedOnChance.bind(this)
     this.onPlayerSteppedOnCommunityChest = this.onPlayerSteppedOnCommunityChest.bind(this)
     this.onPlayerSteppedOnTax = this.onPlayerSteppedOnTax.bind(this)
+    this.onPlayerGotJailed = this.onPlayerGotJailed.bind(this)
   }
 
   onPlayerJoined (player) {
