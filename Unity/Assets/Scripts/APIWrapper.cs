@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -26,6 +24,8 @@ public class APIWrapper : MonoBehaviour
         }
     }
     #endregion
+
+    private bool _locked = false;
 
     public delegate void APICallback(JToken response, string error = null);
     
@@ -117,6 +117,10 @@ public class APIWrapper : MonoBehaviour
 
     private IEnumerator Upload(string path, WWWForm form = null, APICallback callback = null)
     {
+        if (_locked) yield return null;
+
+        _locked = true;
+        
          // TODO: Hardcoded URL
         using (UnityWebRequest www = 
             form == null 
@@ -124,6 +128,8 @@ public class APIWrapper : MonoBehaviour
                 : UnityWebRequest.Post("http://localhost:3000/" + path, form))
         {
             yield return www.SendWebRequest();
+
+            _locked = false;
 
             if (callback != null)
             {
