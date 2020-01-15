@@ -145,7 +145,9 @@ class PlayerEvents extends SocketEmitter {
       },
       {
         $set: {
+          'players.$.duplicateRolls': 0,
           'players.$.jailed': true,
+          'players.$.jailRolls': 0,
           'players.$.position': 10
         }
       },
@@ -158,6 +160,28 @@ class PlayerEvents extends SocketEmitter {
 
     this.onPlayerMoved(user, 10)
     return this.emit('playerGotJailed', { user })
+  }
+
+  async onPlayerGotFurloughed (user) {
+    await Game.findOneAndUpdate(
+      {
+        _id: Types.ObjectId(this._gameId),
+        'players.user': Types.ObjectId(user)
+      },
+      {
+        $set: {
+          'players.$.duplicateRolls': 0,
+          'players.$.jailed': false,
+          'players.$.jailRolls': 0
+        }
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    )
+    await this._gameHolder.update()
+    return this.emit('playerGotFurloughed', { user })
   }
 }
 

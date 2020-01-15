@@ -32,6 +32,11 @@ const gameSchema = new Schema(
         type: Boolean,
         required: true
       },
+      jailRolls: {
+        type: Number,
+        required: true,
+        default: 0
+      },
       joined: {
         type: Date,
         required: true,
