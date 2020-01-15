@@ -65,7 +65,12 @@ const gameSchema = new Schema(
       },
       mortgaged: {
         type: Boolean,
-        required: false
+        required: false,
+        default: false
+      },
+      location: {
+        type: Number,
+        required: true
       }
     }],
     seats: {
