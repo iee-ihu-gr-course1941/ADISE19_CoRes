@@ -1,25 +1,24 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Schema;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CurrentGame : MonoBehaviour
 {
     private CoroutineQueue _queue;
+    private CameraController _cameraController;
     public SocketIo socketIo;
-    public GameObject ownedProperties;
     public GameObject bottomBar;
     public TextMeshProUGUI statusMessage;
     public GameObject[] playerPrefabs = new GameObject[4];
     public Route route;
     public GameObject players;
     public GameObject nowPlayingPlayer;
-    public CameraController cameraController;
     public Dice diceContainer;
     public GameObject chanceCard;
     public GameObject communityChestCard;
+    private BuyProperty _buyProperty;
 
     private readonly Vector3[] _offsets = {
         new Vector3(0.15f, 0, 0.15f),
@@ -37,7 +36,8 @@ public class CurrentGame : MonoBehaviour
         
         _queue.EnqueueAction(ShowStatusMessage("Press space to roll the dice"));
         
-        cameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
+        _cameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
+        _buyProperty = GameObject.Find("BuyUI").GetComponent<BuyProperty>();
 
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
@@ -47,9 +47,7 @@ public class CurrentGame : MonoBehaviour
         socketIo.PlayerPlaysAgain += SocketIoOnPlayerPlaysAgain;
         socketIo.PlayerSteppedOnChance += SocketIoOnPlayerSteppedOnChance;
         socketIo.PlayerSteppedOnCommunityChest += SocketIoOnPlayerSteppedOnCommunityChest;
-        socketIo.PropertyOwnerChanged += SocketIoOnPropertyOwnerChanged;
 
-        UpdateOwnedProperties();
         UpdateBottomBar();
         SetupPlayers();
 
@@ -64,7 +62,7 @@ public class CurrentGame : MonoBehaviour
         var player = Player.GetPlayerById(GameManager.Instance.Game.CurrentPlayerId);
         UpdateBottomBarPlayerPlaying(player);
         
-        cameraController.SetUpCameras();
+        _cameraController.SetUpCameras();
     }
 
     private void SocketIoOnPlayerJoined(Player player)
@@ -89,6 +87,10 @@ public class CurrentGame : MonoBehaviour
         var playerObject = playerList[player.Index];
         _queue.EnqueueAction(playerObject.GetComponent<PlayerMovement>().Move(location));
         _queue.EnqueueWait(1f);
+        if (Property.GetPropertyByLocation(location) != null)
+        {
+            _queue.EnqueueAction(_buyProperty.DisplayCard(location));
+        }
     }
     
     private void SocketIoOnPlayerTurnChanged(Player player)
@@ -96,7 +98,7 @@ public class CurrentGame : MonoBehaviour
         _queue.EnqueueAction(ShowStatusMessage("It's " + player.Name + "'s turn"));
 
         UpdateBottomBarPlayerPlaying(player);
-        cameraController.FocusCameraOn(player);
+        _cameraController.FocusCameraOn(player);
     }
 
     private void SocketIoOnPlayerPlaysAgain(Player player)
@@ -114,11 +116,6 @@ public class CurrentGame : MonoBehaviour
     {
         _queue.EnqueueAction(DisplayCommunityChestCard(text));
         _queue.EnqueueWait(1f);
-    }
-    
-    private void SocketIoOnPropertyOwnerChanged(int propertyIndex, int ownerId)
-    {
-        UpdateOwnedProperties();
     }
 
     private void SetupPlayers()
@@ -199,30 +196,6 @@ public class CurrentGame : MonoBehaviour
             }
             
             balanceTextMeshPro.text = player.Balance + "ΔΜ";
-        }
-    }
-
-    private void UpdateOwnedProperties()
-    {
-        var game = GameManager.Instance.Game;
-        var properties = GameManager.Instance.Game.Properties;
-
-        foreach (var player in game.Players)
-        {
-            var playerOwnedProperties = ownedProperties.transform.GetChild(player.Index);
-            playerOwnedProperties.gameObject.SetActive(true);
-            
-            foreach (var property in properties)
-            {
-                var propertyComponent = playerOwnedProperties.Find(property.Location.ToString());
-                
-                if (propertyComponent == null) return;
-                
-                var image = propertyComponent.GetComponent<Image>();
-                var tempColor = image.color;
-                tempColor.a = property.OwnerId != null ? 1f : 0.5f;
-                image.color = tempColor;
-            }
         }
     }
     
