@@ -43,7 +43,12 @@ namespace Schema
         private string _name;
 
         public string UserId => _userId;
-        public int Balance => _balance;
+        public int Balance
+        {
+            get => _balance;
+            set => _balance = value;
+        }
+
         public int Position => _position;
         public int DuplicateRolls => _duplicateRolls;
         public bool Jailed => _jailed;

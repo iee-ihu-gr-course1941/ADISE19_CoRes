@@ -46,7 +46,12 @@ namespace Schema
         private int _location;
 
         public string Name => _name;
-        public string OwnerId => _ownerId;
+        public string OwnerId
+        {
+            get => _ownerId;
+            set => _ownerId = value;
+        }
+
         public bool Mortgaged => _mortgaged;
         public int Location => _location;
 

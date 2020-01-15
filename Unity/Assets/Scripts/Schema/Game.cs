@@ -75,6 +75,11 @@ namespace Schema
         {
             _currentPlayerId = player.UserId;
         }
+        
+        public Property GetPropertyByIndex(int index)
+        {
+            return _properties[index];
+        }
 
         public string SeatsToString() => $"{_players.Count}/{_seats}";
     }
