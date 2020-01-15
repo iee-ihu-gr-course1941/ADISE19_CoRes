@@ -7,6 +7,7 @@ using UnityEngine;
 public class CurrentGame : MonoBehaviour
 {
     private CoroutineQueue _queue;
+    private CameraController _cameraController;
     public SocketIo socketIo;
     public GameObject bottomBar;
     public TextMeshProUGUI statusMessage;
@@ -14,10 +15,11 @@ public class CurrentGame : MonoBehaviour
     public Route route;
     public GameObject players;
     public GameObject nowPlayingPlayer;
-    public CameraController cameraController;
+    private CardLoader _cardLoader;
     public Dice diceContainer;
     public GameObject chanceCard;
     public GameObject communityChestCard;
+    private BuyProperty _buyProperty;
 
     private readonly Vector3[] _offsets = {
         new Vector3(0.15f, 0, 0.15f),
@@ -35,7 +37,9 @@ public class CurrentGame : MonoBehaviour
         
         _queue.EnqueueAction(ShowStatusMessage("Press space to roll the dice"));
         
-        cameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
+        _cameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
+        _buyProperty = GameObject.Find("BuyUI").GetComponent<BuyProperty>();
+        _cardLoader = GameObject.Find("CardLoader").GetComponent<CardLoader>();
 
         socketIo.PlayerJoined += SocketIoOnPlayerJoined;
         socketIo.PlayerLeft += SocketIoOnPlayerLeft;
@@ -60,7 +64,7 @@ public class CurrentGame : MonoBehaviour
         var player = Player.GetPlayerById(GameManager.Instance.Game.CurrentPlayerId);
         UpdateBottomBarPlayerPlaying(player);
         
-        cameraController.SetUpCameras();
+        _cameraController.SetUpCameras();
     }
 
     private void SocketIoOnPlayerJoined(Player player)
@@ -85,6 +89,10 @@ public class CurrentGame : MonoBehaviour
         var playerObject = playerList[player.Index];
         _queue.EnqueueAction(playerObject.GetComponent<PlayerMovement>().Move(location));
         _queue.EnqueueWait(1f);
+        if (Property.GetPropertyByLocation(location) != null)
+        {
+            _queue.EnqueueAction(_buyProperty.DisplayCard(location));
+        }
     }
     
     private void SocketIoOnPlayerTurnChanged(Player player)
@@ -92,7 +100,7 @@ public class CurrentGame : MonoBehaviour
         _queue.EnqueueAction(ShowStatusMessage("It's " + player.Name + "'s turn"));
 
         UpdateBottomBarPlayerPlaying(player);
-        cameraController.FocusCameraOn(player);
+        _cameraController.FocusCameraOn(player);
     }
 
     private void SocketIoOnPlayerPlaysAgain(Player player)
