@@ -114,6 +114,11 @@ public class APIWrapper : MonoBehaviour
     {
         StartCoroutine(Upload("player/end-turn", null, callback));
     }
+    
+    public void TransactionBuyCurrentProperty(APICallback callback = null)
+    {
+        StartCoroutine(Upload("transaction/buy-current-property", null, callback));
+    }
 
     private IEnumerator Upload(string path, WWWForm form = null, APICallback callback = null)
     {
