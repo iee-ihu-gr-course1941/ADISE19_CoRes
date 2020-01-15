@@ -8,8 +8,6 @@ public class Leave : MonoBehaviour
     
     public void OnClick()
     {
-        socketIo.Close();
-        
         APIWrapper.Instance.GameLeave((response, error) =>
         {
             SceneManager.LoadScene("Home", LoadSceneMode.Single);
@@ -19,5 +17,7 @@ public class Leave : MonoBehaviour
                 throw new Exception(error);
             }
         });
+        
+        socketIo.Close();
     }
 }
