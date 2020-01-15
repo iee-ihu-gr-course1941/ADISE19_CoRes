@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Schema;
 using TMPro;
@@ -8,6 +8,7 @@ public class CurrentGame : MonoBehaviour
 {
     private CoroutineQueue _queue;
     public SocketIo socketIo;
+    public GameObject ownedProperties;
     public GameObject bottomBar;
     public TextMeshProUGUI statusMessage;
     public GameObject[] playerPrefabs = new GameObject[4];
