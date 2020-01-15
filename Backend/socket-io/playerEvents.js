@@ -1,5 +1,7 @@
 const config = require('../config.json')
 
+const { Types } = require('mongoose')
+
 const SocketEmitter = require('./socketEmitter')
 
 const Game = require('../models/game')
@@ -65,6 +67,12 @@ class PlayerEvents extends SocketEmitter {
       this.onPlayerSteppedOnTax(user, index)
     }
 
+    // Check for Go To Jail
+    const goToJail = 30
+    if (location === goToJail) {
+      this.onPlayerGotJailed(user)
+    }
+
     return emitResult
   }
 
@@ -126,6 +134,29 @@ class PlayerEvents extends SocketEmitter {
       await this._gameHolder.update()
     }
     return emitResult
+  }
+
+  async onPlayerGotJailed (user) {
+    await Game.findOneAndUpdate(
+      {
+        _id: Types.ObjectId(this._gameId),
+        'players.user': Types.ObjectId(user)
+      },
+      {
+        $set: {
+          'players.$.jailed': true,
+          'players.$.position': 10
+        }
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    )
+    await this._gameHolder.update()
+
+    this.onPlayerMoved(user, 10)
+    return this.emit('playerGotJailed', { user })
   }
 }
 
