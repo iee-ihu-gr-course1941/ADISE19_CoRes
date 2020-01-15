@@ -38,13 +38,13 @@ public class SocketIo : MonoBehaviour
     
     private void Start()
     {
-        StartCoroutine(Upload("socket.io/?EIO=3&transport=polling", null, async (response, error) =>
+        StartCoroutine(Upload("socket.io/?EIO=3&transport=polling", async (response, error) =>
         {
             if (error != null) return;
             
             string sid = (string) response["sid"];
 
-            _websocket = new WebSocket("ws://localhost:3000/socket.io/?EIO=3&transport=websocket&sid=" + sid);
+            _websocket = new WebSocket(APIWrapper.WS_PROTOCOL + APIWrapper.URL + "socket.io/?EIO=3&transport=websocket&sid=" + sid);
 
             _websocket.OnOpen += () =>
             {
@@ -224,13 +224,9 @@ public class SocketIo : MonoBehaviour
         return GameManager.Instance.Game;
     }
 
-    private IEnumerator Upload(string path, WWWForm form = null, APIWrapper.APICallback callback = null)
+    private IEnumerator Upload(string path, APIWrapper.APICallback callback = null)
     {
-        // TODO: Hardcoded URL
-        using (UnityWebRequest www = 
-            form == null 
-                ? UnityWebRequest.Get("http://localhost:3000/" + path)
-                : UnityWebRequest.Post("http://localhost:3000/" + path, form))
+        using (UnityWebRequest www = UnityWebRequest.Get(APIWrapper.HTTP_PROTOCOL + APIWrapper.URL + path))
         {
             yield return www.SendWebRequest();
 

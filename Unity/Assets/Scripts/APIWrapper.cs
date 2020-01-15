@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿// #define MONOPOLIEE_PRODUCTION_MODE
+
+using System.Collections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -24,6 +26,16 @@ public class APIWrapper : MonoBehaviour
         }
     }
     #endregion
+
+    #if MONOPOLIEE_PRODUCTION_MODE
+    public const string HTTP_PROTOCOL = "http://";
+    public const string WS_PROTOCOL = "ws://";
+    public const string URL = "monopoliee.cores.gr/";
+    #else
+    public const string HTTP_PROTOCOL = "http://";
+    public const string WS_PROTOCOL = "ws://";
+    public const string URL = "localhost:3000/";
+    #endif
 
     private bool _locked = false;
 
@@ -121,11 +133,10 @@ public class APIWrapper : MonoBehaviour
 
         _locked = true;
         
-         // TODO: Hardcoded URL
         using (UnityWebRequest www = 
             form == null 
-                ? UnityWebRequest.Get("http://localhost:3000/" + path)
-                : UnityWebRequest.Post("http://localhost:3000/" + path, form))
+                ? UnityWebRequest.Get(HTTP_PROTOCOL + URL + path)
+                : UnityWebRequest.Post(HTTP_PROTOCOL + URL + path, form))
         {
             yield return www.SendWebRequest();
 
