@@ -24,7 +24,7 @@ namespace Schema
                 _properties.Add(propertyId, newProperty);
             }
 
-            return _properties[propertyId];;
+            return _properties[propertyId];
         }
 
         public static Property GetPropertyByLocation(int location)

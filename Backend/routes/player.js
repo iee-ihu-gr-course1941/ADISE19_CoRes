@@ -71,28 +71,54 @@ router.get('/roll-dice', async (req, res, next) => {
       Math.floor(Math.random() * 6) + 1
     ]
 
-    const diceSum = dice[0] + dice[1]
-    const newLocation = (player.position + diceSum) % 40
-
     const gameHolder = res.locals.game.getGameHolder()
     gameHolder.getPlayerEvents().onPlayerRolledDice(player.user, dice)
 
     const game = await Game.findById(currentGame._id)
     const gamePlayer = game.players.find(p => p.user.toString() === req.session.user._id)
-    if (player.position + diceSum >= 40) {
-      gamePlayer.balance += 200
 
-      gameHolder.getPlayerEvents().onPlayerPassedFromGo(player.user)
-      gameHolder.getPlayerEvents().onPlayerGotPaid(player.user, 200)
-      gameHolder.getPlayerEvents().onPlayerBalanceChanged(player.user, gamePlayer.balance)
+    if (player.jailed) {
+      if (dice[0] === dice[1]) {
+        gameHolder.getPlayerEvents().onPlayerGotFurloughed(player.user)
+      } else {
+        gamePlayer.jailRolls++
+
+        if (gamePlayer.jailRolls === 3) {
+          gameHolder.getPlayerEvents().onPlayerGotFurloughed(player.user)
+        }
+      }
+    } else {
+      if (dice[0] === dice[1]) {
+        gamePlayer.duplicateRolls++
+      } else {
+        gamePlayer.duplicateRolls = 0
+      }
+
+      if (gamePlayer.duplicateRolls === 3) {
+        gameHolder.getPlayerEvents().onPlayerGotJailed(player.user)
+      } else {
+        const diceSum = dice[0] + dice[1]
+        const newLocation = (player.position + diceSum) % 40
+
+        if (player.position + diceSum >= 40) {
+          gamePlayer.balance += 200
+
+          gameHolder.getPlayerEvents().onPlayerPassedFromGo(player.user)
+          gameHolder.getPlayerEvents().onPlayerGotPaid(player.user, 200)
+          gameHolder.getPlayerEvents().onPlayerBalanceChanged(player.user, gamePlayer.balance)
+        }
+
+        gamePlayer.position = newLocation
+
+        gameHolder.getPlayerEvents().onPlayerMoved(player.user, newLocation)
+      }
     }
-    gamePlayer.position = newLocation
+
     gamePlayer.lastRoll = dice
     gamePlayer.rolled = true
+
     await game.save()
     await gameHolder.update()
-
-    gameHolder.getPlayerEvents().onPlayerMoved(player.user, newLocation)
 
     return res.json({ dice })
   } catch (err) {
@@ -118,17 +144,28 @@ router.get('/end-turn', async (req, res, next) => {
 
     let nextPlayer
 
-    if (player.lastRoll[0] === player.lastRoll[1]) {
+    if (player.lastRoll[0] === player.lastRoll[1] && !player.jailed) {
       gameHolder.getPlayerEvents().onPlayerPlaysAgain(req.session.user._id)
       nextPlayer = player
     } else {
       nextPlayer = nextPlayerTurn(gameHolder)
     }
 
-    await Game.findById(game._id).then(g => {
-      g.players.find(p => p.user.toString() === player.user.toString()).rolled = false
-      return g.save()
-    })
+    await Game.findOneAndUpdate(
+      {
+        _id: Types.ObjectId(game._id),
+        'players.user': Types.ObjectId(player.user)
+      },
+      {
+        $set: {
+          'players.$.rolled': false
+        }
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    )
 
     return res.json({ nextPlayer })
   } catch (err) {

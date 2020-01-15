@@ -1,5 +1,7 @@
 const config = require('../config.json')
 
+const { Types } = require('mongoose')
+
 const SocketEmitter = require('./socketEmitter')
 
 const Game = require('../models/game')
@@ -25,6 +27,7 @@ class PlayerEvents extends SocketEmitter {
     this.onPlayerSteppedOnChance = this.onPlayerSteppedOnChance.bind(this)
     this.onPlayerSteppedOnCommunityChest = this.onPlayerSteppedOnCommunityChest.bind(this)
     this.onPlayerSteppedOnTax = this.onPlayerSteppedOnTax.bind(this)
+    this.onPlayerGotJailed = this.onPlayerGotJailed.bind(this)
   }
 
   onPlayerJoined (player) {
@@ -63,6 +66,12 @@ class PlayerEvents extends SocketEmitter {
     if (taxes.includes(location)) {
       const index = config.prices.taxes.findIndex(t => t.location === location)
       this.onPlayerSteppedOnTax(user, index)
+    }
+
+    // Check for Go To Jail
+    const goToJail = 30
+    if (location === goToJail) {
+      this.onPlayerGotJailed(user)
     }
 
     return emitResult
@@ -126,6 +135,53 @@ class PlayerEvents extends SocketEmitter {
       await this._gameHolder.update()
     }
     return emitResult
+  }
+
+  async onPlayerGotJailed (user) {
+    await Game.findOneAndUpdate(
+      {
+        _id: Types.ObjectId(this._gameId),
+        'players.user': Types.ObjectId(user)
+      },
+      {
+        $set: {
+          'players.$.duplicateRolls': 0,
+          'players.$.jailed': true,
+          'players.$.jailRolls': 0,
+          'players.$.position': 10
+        }
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    )
+    await this._gameHolder.update()
+
+    this.onPlayerMoved(user, 10)
+    return this.emit('playerGotJailed', { user })
+  }
+
+  async onPlayerGotFurloughed (user) {
+    await Game.findOneAndUpdate(
+      {
+        _id: Types.ObjectId(this._gameId),
+        'players.user': Types.ObjectId(user)
+      },
+      {
+        $set: {
+          'players.$.duplicateRolls': 0,
+          'players.$.jailed': false,
+          'players.$.jailRolls': 0
+        }
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    )
+    await this._gameHolder.update()
+    return this.emit('playerGotFurloughed', { user })
   }
 }
 
