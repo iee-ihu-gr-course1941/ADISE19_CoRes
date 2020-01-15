@@ -42,61 +42,33 @@ public class BuyProperty : MonoBehaviour
                 }
             }
             _cards.SetActive(true);
-            foreach (GameObject card in _cardsList)
+            GameObject stCard = _cardsList[1];
+            stCard.SetActive(true);
+            stCard.transform.Find("Name").gameObject.GetComponent<TextMeshProUGUI>().text = stationCard.name;
+            for (int i = 0; i < stationCard.rents.Length; i++)
             {
-                if (card.name != "StationCard")
-                {
-                    card.SetActive(false);
-                }
-                else
-                {
-                    card.SetActive(true);
-
-                    card.transform.Find("Name").gameObject.GetComponent<TextMeshProUGUI>().text = stationCard.name;
-                    for (int i = 0; i < stationCard.rents.Length; i++)
-                    {
-                        card.transform.Find("Rent" + i).gameObject.GetComponent<TextMeshProUGUI>().text =
-                            stationCard.rents[i].ToString();
-                    }
-                    card.transform.Find("MortgageText").gameObject.GetComponent<TextMeshProUGUI>().text = stationCard.mortgage.ToString();
-                }
+                stCard.transform.Find("Rent" + i).gameObject.GetComponent<TextMeshProUGUI>().text =
+                    stationCard.rents[i].ToString();
             }
+            stCard.transform.Find("MortgageText").gameObject.GetComponent<TextMeshProUGUI>().text = stationCard.mortgage.ToString();
         }
         if (location == 12)
         {
             List<UtilityCard> utilityCards = _cardLoader.utilitiesList;
             UtilityCard utilityCard = utilityCards[0];
             _cards.SetActive(true);
-            foreach (GameObject card in _cardsList)
-            {
-                if (card.name != "UtilityCard1")
-                {
-                    card.SetActive(false);
-                }
-                else
-                {
-                    card.SetActive(true);
-                    card.transform.Find("MortgageText").gameObject.GetComponent<TextMeshProUGUI>().text = utilityCard.mortgage.ToString();
-                }
-            }
+            GameObject uCard1 = _cardsList[2];
+            uCard1.SetActive(true);
+            uCard1.transform.Find("MortgageText").gameObject.GetComponent<TextMeshProUGUI>().text = utilityCard.mortgage.ToString();
         }
         if (location == 28)
         {
             List<UtilityCard> utilityCards = _cardLoader.utilitiesList;
             UtilityCard utilityCard = utilityCards[0];
             _cards.SetActive(true);
-            foreach (GameObject card in _cardsList)
-            {
-                if (card.name != "UtilityCard2")
-                {
-                    card.SetActive(false);
-                }
-                else
-                {
-                    card.SetActive(true);
-                    card.transform.Find("MortgageText").gameObject.GetComponent<TextMeshProUGUI>().text = utilityCard.mortgage.ToString();
-                }
-            }
+            GameObject uCard2 = _cardsList[3];
+            uCard2.SetActive(true);
+            uCard2.transform.Find("MortgageText").gameObject.GetComponent<TextMeshProUGUI>().text = utilityCard.mortgage.ToString();
         }
         else
         {
