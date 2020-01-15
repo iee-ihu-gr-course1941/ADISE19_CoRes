@@ -1,4 +1,8 @@
+const config = require('../config.json')
+
 const SocketEmitter = require('./socketEmitter')
+
+const Game = require('../models/game')
 
 const chanceCards = require('../library/chances')
 const communityChestCards = require('../library/communityChests')
@@ -20,6 +24,7 @@ class PlayerEvents extends SocketEmitter {
     this.onPlayerBalanceChanged = this.onPlayerBalanceChanged.bind(this)
     this.onPlayerSteppedOnChance = this.onPlayerSteppedOnChance.bind(this)
     this.onPlayerSteppedOnCommunityChest = this.onPlayerSteppedOnCommunityChest.bind(this)
+    this.onPlayerSteppedOnTax = this.onPlayerSteppedOnTax.bind(this)
   }
 
   onPlayerJoined (player) {
@@ -51,6 +56,13 @@ class PlayerEvents extends SocketEmitter {
     const communityChests = [2, 17, 33]
     if (communityChests.includes(location)) {
       this.onPlayerSteppedOnCommunityChest(user)
+    }
+
+    // Check for tax
+    const taxes = [4, 38]
+    if (taxes.includes(location)) {
+      const index = config.prices.taxes.findIndex(t => t.location === location)
+      this.onPlayerSteppedOnTax(user, index)
     }
 
     return emitResult
@@ -98,6 +110,22 @@ class PlayerEvents extends SocketEmitter {
       card.action(user, this._gameHolder)
       return emitResult
     }
+  }
+
+  async onPlayerSteppedOnTax (user, tax) {
+    const emitResult = this.emit('playerSteppedOnTax', { user, tax })
+    const currentGame = this._gameHolder.getJSON()
+    const player = currentGame.players.find(p => p.user.toString() === user.toString())
+    if (player.balance > config.prices.taxes[tax].price) {
+      const game = await Game.findById(this._gameId)
+      const gamePlayer = game.players.find(p => p.user.toString() === user.toString())
+      gamePlayer.balance -= config.prices.taxes[tax].price
+      this._gameHolder.getPlayerEvents().onPlayerPaid(player.user, config.prices.taxes[tax].price)
+      this._gameHolder.getPlayerEvents().onPlayerBalanceChanged(player.user, gamePlayer.balance)
+      await game.save()
+      await this._gameHolder.update()
+    }
+    return emitResult
   }
 }
 
