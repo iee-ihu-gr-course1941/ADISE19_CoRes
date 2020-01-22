@@ -3,6 +3,11 @@
 
 #### Play at [http://monopoliee.cores.gr](http://monopoliee.cores.gr)
 
+#### Restrictions
+- 2 - 4 players
+- WebGL browser support
+- Only works on PC
+
 # Setup
 
 ## Dependencies
