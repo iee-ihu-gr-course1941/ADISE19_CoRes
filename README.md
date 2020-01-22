@@ -1,12 +1,13 @@
 # ADISE19_CoRes - Monopoliee
 ### IHU Themed Monopoly
 
-#### Play at [http://monopoliee.cores.gr](http://monopoliee.cores.gr)
+#### PC version page [http://monopoliee.cores.gr](http://monopoliee.cores.gr)
+
+#### Android version [download link](https://github.com/iee-ihu-gr-course1941/ADISE19_CoRes/releases/download/1.0.1/Monopoliee-v1.0.1.apk)
 
 #### Restrictions
 - 2 - 4 players
-- WebGL browser support
-- Only works on PC
+- WebGL browser support needed for PC version
 
 # Setup
 
